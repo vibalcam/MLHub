@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <!-- Bootstrap css -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>MLHub</title>
+        <link rel="stylesheet" href="styles/styles.css"/>
+    </head>
+
+    <body class="offset-xl-3 col-xl-6 offset-sm-1 col-sm-10">
+        <div class="jumbotron bg-dark text-white">
+            <div class="container text-center row align-items-center justify-content-center">
+                <div class="col-xl-6 col-md-12">
+                    <h1 class="text-center">Bienvenido a MLHub</h1>
+                    <p class="lead">
+                        El lugar para los developers de Machine Learning
+                    </p>
+                </div>
+                <img class="offset-xl-1 col-xl-4 col-sm-6 img-fluid rounded" src="images/logo.jpg" alt="Logo">
+            </div>
+        </div>
+
+        <div class="p-5 bg-light card border border-dark rounded">
+            <form class="card-body" action="${pageContext.request.contextPath}/entry" method="post" name="inicio">
+                <div class="form-group col-sm-auto">
+                    <label for="usuario">Usuario: </label>
+                    <input class="form-control" type="text" name="usuario" id="usuario" placeholder="Usuario">
+                </div>
+
+                <div class="form-group col-sm-auto">
+                    <label for="pwd">Contraseña: </label>
+                    <input class="form-control" type="password" name="pwd" id="pwd" placeholder="Contraseña">
+                </div>
+
+                <div class="form-group col-sm-auto">        
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="remember" name="remember">
+                        <label class="form-check-label" for="remember">Mantener la sesión iniciada</label>
+                    </div>
+                </div>
+
+                <div id="error" class="bg-danger text-light font-weight-bold p-1 px-4 m-2 rounded">fsdaf</div>
+
+                <div class="form-group col-sm-auto">
+                    <input class="btn btn-secondary" type="submit" name="reg" value="Registrarse">
+                    <input class="btn btn-primary" type="submit" name="acc" value="Acceder" onclick="return hasRequired()">
+                </div>
+            </form>
+        </div>
+
+        <!-- JQuery -->
+        <script src="scripts/jquery-3.3.1.js"></script>
+        <!-- Bootstrap js -->
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+        <!-- Custom js -->
+        <script src="scripts/adminScript.js"></script>
+    </body>
+</html>
