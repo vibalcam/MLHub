@@ -24,6 +24,10 @@
     border-bottom: 1px solid rgb(172, 172, 172);
 }
 
+.table-columns thead tr th {
+    border-bottom: 2px solid rgb(172, 172, 172);
+}
+
 .table-columns tr:hover {
     color: #fff;
     background: #969696;

@@ -1,3 +1,5 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="es">
     <head>
@@ -24,29 +26,36 @@
         </div>
 
         <div class="p-5 bg-light card border border-dark rounded">
-            <form class="card-body" action="${pageContext.request.contextPath}/entry" method="post" name="inicio">
+            <form class="card-body" action="${pageContext.request.contextPath}/acceso" method="post" name="inicio" id="inicioForm">
                 <div class="form-group col-sm-auto">
                     <label for="usuario">Usuario: </label>
-                    <input class="form-control" type="text" name="usuario" id="usuario" placeholder="Usuario">
+                    <input class="form-control input-credentials" minlength="1" maxlength="${initParam.maxLength}" type="text" name="usuario" id="usuario" placeholder="Usuario">
                 </div>
 
                 <div class="form-group col-sm-auto">
                     <label for="pwd">Contraseña: </label>
-                    <input class="form-control" type="password" name="pwd" id="pwd" placeholder="Contraseña">
+                    <input class="form-control input-credentials" minlength="1" maxlength="${initParam.maxLength}" type="password" name="pwd" id="pwd" placeholder="Contraseña">
                 </div>
 
                 <div class="form-group col-sm-auto">        
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="remember" name="remember">
-                        <label class="form-check-label" for="remember">Mantener la sesión iniciada</label>
+                        <input class="form-check-input" type="checkbox" id="remember" name="remember" value="true">
+                        <label class="form-check-label" for="remember">Recordar mi usuario</label>
                     </div>
                 </div>
 
-                <div id="error" class="bg-danger text-light font-weight-bold p-1 px-4 m-2 rounded">fsdaf</div>
+                <c:choose>
+                    <c:when test="${not empty requestScope.error}">
+                        <div id="error" class="bg-danger text-light font-weight-bold p-1 px-4 m-2 rounded">${requestScope.error}</div>
+                    </c:when>
+                    <c:otherwise>
+                        <div id="error" class="bg-danger text-light font-weight-bold p-1 px-4 m-2 rounded d-none">${requestScope.error}</div>
+                    </c:otherwise>
+                </c:choose>
 
                 <div class="form-group col-sm-auto">
-                    <input class="btn btn-secondary" type="submit" name="reg" value="Registrarse">
-                    <input class="btn btn-primary" type="submit" name="acc" value="Acceder" onclick="return hasRequired()">
+                    <button class="btn btn-secondary" type="submit" name="peticion" value="reg">Registrarse</button>
+                    <button class="btn btn-primary" type="submit" name="peticion" id="buttonAcc" value="acc">Acceder</button>
                 </div>
             </form>
         </div>
@@ -58,6 +67,6 @@
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
         <!-- Custom js -->
-        <script src="scripts/adminScript.js"></script>
+        <script src="scripts/indexScript.js"></script>
     </body>
 </html>
