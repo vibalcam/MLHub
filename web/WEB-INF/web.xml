@@ -17,4 +17,24 @@
         <servlet-name>Index</servlet-name>
         <url-pattern>/index</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>Subscripcion</servlet-name>
+        <jsp-file>/subscripcion.jsp</jsp-file>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>Subscripcion</servlet-name>
+        <url-pattern>/inicio/subscripcion</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>Admin</servlet-name>
+        <jsp-file>/admin.jsp</jsp-file>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>Admin</servlet-name>
+        <url-pattern>/inicio/admin</url-pattern>
+    </servlet-mapping>
 </web-app>

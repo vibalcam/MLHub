@@ -2,6 +2,11 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="es">
+    <%-- Si ya ha iniciado sesion accede directamente--%>
+<%--    <c:if test="${not empty sessionScope.userLogged}"> todo quitar tras periodo de test--%>
+<%--        <c:redirect url="/inicio"/>--%>
+<%--    </c:if>--%>
+
     <head>
         <!-- Bootstrap css -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
@@ -26,20 +31,25 @@
         </div>
 
         <div class="p-5 bg-light card border border-dark rounded">
-            <form class="card-body" action="${pageContext.request.contextPath}/acceso" method="post" name="inicio" id="inicioForm">
+            <form class="card-body" action="${pageContext.request.contextPath}/acceso" method="post" name="inicio"
+                  id="inicioForm">
                 <div class="form-group col-sm-auto">
                     <label for="usuario">Usuario: </label>
-                    <input class="form-control input-credentials" minlength="1" maxlength="${initParam.maxLength}" type="text" name="usuario" id="usuario" placeholder="Usuario">
+                    <input class="form-control input-credentials" minlength="1" maxlength="${initParam.maxLength}"
+                           type="text" name="usuario" id="usuario" placeholder="Usuario" value="${cookie.remember.value}">
                 </div>
 
                 <div class="form-group col-sm-auto">
                     <label for="pwd">Contraseña: </label>
-                    <input class="form-control input-credentials" minlength="1" maxlength="${initParam.maxLength}" type="password" name="pwd" id="pwd" placeholder="Contraseña">
+                    <input class="form-control input-credentials" minlength="1" maxlength="${initParam.maxLength}"
+                           type="password" name="pwd" id="pwd" placeholder="Contraseña">
                 </div>
 
                 <div class="form-group col-sm-auto">        
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="remember" name="remember" value="true">
+                        <input class="form-check-input" type="checkbox" id="remember" name="remember" value="true"
+                            <c:if test="${not empty cookie.remember}">checked</c:if>
+                        >
                         <label class="form-check-label" for="remember">Recordar mi usuario</label>
                     </div>
                 </div>

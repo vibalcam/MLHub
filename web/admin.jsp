@@ -1,3 +1,6 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="es">
     <head>
@@ -69,9 +72,9 @@
                             <span>Toggle Sidebar</span>
                         </button>
 
-                        <form class="row form-inline ml-4 d-none d-lg-inline">
-                            <input class="form-control mr-sm-2 col-7" type="search" placeholder="Buscar" aria-label="Buscar">
-                            <button class="btn btn-success" type="submit">Buscar</button>
+                        <form class="row form-inline ml-4 d-none d-lg-inline" id="formBuscar" name="formBuscar" method="get" action="${pageContext.request.contextPath}/inicio">
+                            <input class="form-control mr-sm-2 col-7" type="search" name="searchName" required placeholder="Buscar" aria-label="Buscar">
+                            <button class="btn btn-success" type="submit" name="action" value="searchEntry">Buscar</button>
                         </form>
 
                         <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -82,13 +85,16 @@
                         <div class="collapse navbar-collapse" id="navbarSupportedContent">
                             <ul class="nav navbar-nav ml-auto">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#">Inicio</a>
+                                    <a class="nav-link" href="${pageContext.request.contextPath}/inicio">Inicio</a>
                                 </li>
                                 <li class="nav-item active">
-                                    <a class="nav-link" href="#">Cuenta</a>
+                                    <a class="nav-link" href="${pageContext.request.contextPath}/inicio/admin">Cuenta</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#">Cerrar sesión</a>
+                                    <form id="formCerrarSesion" name="formCerrarSesion" method="post" action="${pageContext.request.contextPath}/inicio">
+                                        <a class="nav-link" href="#">Cerrar sesión</a>
+<%--                                        todo submit with jquery--%>
+                                    </form>
                                 </li>
                             </ul>
                         </div>
@@ -106,10 +112,10 @@
                             <div class="w-100 d-block d-lg-none"></div>
                             <form class="col form-row justify-content-end" name="dateProductos" id="dateProductos">
                                 <div class="col-lg-auto col-md-6">
-                                    <input name="inicio" type="date" class="form-control datepickerStart" placeholder="Inicio">
+                                    <input id="inicioMaxProducto" name="inicioMaxProducto" type="date" class="form-control datepickerStart datepicker-product" placeholder="Inicio">
                                 </div>
                                 <div class="col-lg-auto col-md-6">
-                                    <input name="fin" type="date" class="form-control datepickerEnd" placeholder="Final">
+                                    <input id="finMaxProducto" name="finMaxProducto" type="date" class="form-control datepickerEnd datepicker-product" placeholder="Final">
                                 </div>
                             </form>
                         </div>
@@ -122,17 +128,8 @@
                                         <th scope="col">Cantidad vendida</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr>
-                                        <th scope="row">1</th>
-                                        <td>Prueba</td>
-                                        <td>50</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">1</th>
-                                        <td>Prueba</td>
-                                        <td>50</td>
-                                    </tr>
+                                <tbody id="maxComprasProductos">
+                                    <jsp:include page="/admin/maxComprasProductos.jsp"/>
                                 </tbody>
                             </table>
                         </div>
@@ -158,19 +155,19 @@
                             <table class="table table-hover">
                                 <thead>
                                     <tr>
-                                        <th scope="col">Nombre</th>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Fecha</th>
                                         <th scope="col">Cantidad vendida</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>Prueba</td>
-                                        <td>50</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Prueba</td>
-                                        <td>50</td>
-                                    </tr>
+                                    <c:forEach varStatus="loop" var="compra" items="${requestScope.fechaMasCompra}">
+                                        <tr>
+                                            <th scope="row">${loop.count}</th>
+                                            <td><fmt:formatDate value="${compra.fecha.time}" type="date" dateStyle="short" /></td>
+                                            <td>${compra.cantidad}</td>
+                                        </tr>
+                                    </c:forEach>
                                 </tbody>
                             </table>
                         </div>
@@ -200,35 +197,37 @@
                             Se ha realizado una modificación en los productos
                         </div>
                         <div class="border border-dark rounded mt-2">
-                            <table class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">Nivel</th>
-                                        <th scope="col">Nombre</th>
-                                        <th scope="col">Precio</th>
-                                        <th scope="col">Acciones</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <form>
+                            <form id="formModProductos" name="formModProductos" method="post" action="${pageContext.request.contextPath}/inicio/admin">
+                                <table class="table table-hover">
+                                    <thead>
                                         <tr>
-                                            <th scope="row"><input type="number" min="0" class="form-control input-sm input-change" placeholder="Nivel" value="50"></th>
-                                            <td><input type="text" class="form-control input-sm input-change" placeholder="Nombre" value="Prueba"></td>
-                                            <td><input type="number" min="0" class="form-control input-sm input-change" placeholder="Precio" value="50"></td>
-                                            <td>
-                                                <button type="submit" class="btn btn-outline-secondary mb-1" name="chg">Modificar</button>
-                                                <button type="submit" class="btn btn-outline-danger mb-1" name="del">Eliminar</button>
-                                            </td>
+                                            <th scope="col">Nivel</th>
+                                            <th scope="col">Nombre</th>
+                                            <th scope="col">Precio (€)</th>
+                                            <th scope="col">Acciones</th>
                                         </tr>
+                                    </thead>
+                                    <tbody>
+                                        <c:forEach varStatus="loop" var="subs" items="${requestScope.productos}">
+                                            <tr>
+                                                <th scope="row"><input type="number" min="0" class="form-control input-sm input-change" placeholder="Nivel" name="nivel" value="${subs.accessLevel.id}"></th>
+                                                <td><input type="text" class="form-control input-sm input-change" placeholder="Nombre" name="nombre" value="${subs.nombre}"></td>
+                                                <td><input type="number" min="0" class="form-control input-sm input-change" placeholder="Precio" name="precio" value="${subs.precio}"></td>
+                                                <td>
+                                                    <button type="submit" class="btn btn-outline-secondary mb-1" name="action" value="chgProducto">Modificar</button>
+                                                    <button type="submit" class="btn btn-outline-danger mb-1" name="action" value="delProducto">Eliminar</button>
+                                                </td>
+                                            </tr>
+                                        </c:forEach>
                                         <tr>
-                                            <th scope="row"><input type="number" min="0" class="form-control input-sm" placeholder="Nivel"></th>
-                                            <td><input type="text" class="form-control input-sm" placeholder="Nombre"></td>
-                                            <td><input type="number" min="0" class="form-control input-sm" placeholder="Precio"></td>
+                                            <th scope="row"><input type="number" min="0" class="form-control input-sm" placeholder="Nivel" name="nivel"></th>
+                                            <td><input type="text" class="form-control input-sm" placeholder="Nombre" name="nombre"></td>
+                                            <td><input type="number" min="0" class="form-control input-sm" placeholder="Precio" name=""></td>
                                             <td><button type="submit" class="btn btn-outline-success" name="add">Añadir</button></td>
                                         </tr>
-                                    </form>
-                                </tbody>
-                            </table>
+                                    </tbody>
+                                </table>
+                            </form>
                         </div>
                     </div>
                     
@@ -252,35 +251,32 @@
                             </form>
                         </div>
                         <div class="border border-dark rounded mt-2">
-                            <table class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">Nombre</th>
-                                        <th scope="col">Precio</th>
-                                        <th scope="col">Descuento</th>
-                                        <th scope="col">Precio descontado</th>
-                                        <th scope="col">Eliminar</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <form>
+                            <form id="formOfertas" name="formOfertas" method="post" action="${pageContext.request.contextPath}/inicio/admin">
+                                <table class="table table-hover">
+                                    <thead>
                                         <tr>
-                                            <td>Prueba</td>
-                                            <td>50</td>
-                                            <td>50</td>
-                                            <td>50</td>
-                                            <td><button type="submit" class="btn btn-outline-danger" name="del">Eliminar</button></td>
+                                            <th scope="col">Nombre</th>
+                                            <th scope="col">Precio (€)</th>
+                                            <th scope="col">Descuento</th>
+                                            <th scope="col" class="d-none d-sm-block">Precio descontado (€)</th>
+                                            <th scope="col">Eliminar</th>
                                         </tr>
-                                        <tr>
-                                            <td>Prueba</td>
-                                            <td>70</td>
-                                            <td>70</td>
-                                            <td>70</td>
-                                            <td><button type="submit" class="btn btn-outline-danger" name="del">Eliminar</button></td>
-                                        </tr>
-                                    </form>
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        <c:forEach var="subs" items="${requestScope.productos}">
+                                            <c:if test="${subs.porcentajeOferta != 0}">
+                                                <tr>
+                                                    <td>${subs.nombre}</td>
+                                                    <td>${subs.precio}</td>
+                                                    <td>${subs.porcentajeOferta}</td>
+                                                    <td class="d-none d-sm-block">${subs.precioReal}</td>
+                                                    <td><button type="submit" class="btn btn-outline-danger" name="del">Eliminar</button></td>
+                                                </tr>
+                                            </c:if>
+                                        </c:forEach>
+                                    </tbody>
+                                </table>
+                            </form>
                         </div>
                     </div>
                 </div>

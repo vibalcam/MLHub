@@ -5,15 +5,15 @@ public class AccessLevel implements Comparable<AccessLevel> {
     public static final int REGISTERED_LEVEL = 99;
 
     private int id;
-    private boolean subirCodigo;
-    private boolean accesoResultados;
-    private boolean subirResultados;
+    private boolean subirCodigo = true;
+    private boolean accesoResultados = false;
+    private boolean subirResultados = false;
 
     public AccessLevel(int id) {
         this.id = id;
     }
 
-    public AccessLevel(int id, boolean subirCodigo, boolean accesoResultados, boolean subirResultados) {
+    public AccessLevel(int id, boolean subirCodigo, boolean subirResultados, boolean accesoResultados) {
         setId(id);
         this.subirCodigo = subirCodigo;
         this.accesoResultados = accesoResultados;

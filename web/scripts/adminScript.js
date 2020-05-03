@@ -15,5 +15,16 @@ $(document).ready(function () {
     });
 
     // AJAX estadísticas
-    
+    $('.datepicker-product').blur(function () {
+        var action = "getMaxProductos";
+        var fechaInicio = $('#inicioMaxProducto').val();
+        var fechaFin = $('#finMaxProducto').val();
+        $.post("inicio/admin/procesar", {
+            action : action,
+            fechaInicio : fechaInicio,
+            fechaFin : fechaFin
+        }, function (response) {
+            $('#maxComprasProductos').html(response);
+        })
+    });
 });

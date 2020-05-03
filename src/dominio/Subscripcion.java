@@ -1,16 +1,17 @@
 package dominio;
 
-public class Subscripcion {
+public class Subscripcion implements Comparable<Subscripcion> {
     private int id;
     private String nombre;
     private double precio;
     private int porcentajeOferta;
     private AccessLevel accessLevel;
 
-    public Subscripcion(int id, String nombre, double precio, AccessLevel accessLevel) {
+    public Subscripcion(int id, String nombre, double precio,int porcentajeOferta, AccessLevel accessLevel) {
         this.id = id;
         this.nombre = nombre;
         setPrecio(precio);
+        setPorcentajeOferta(porcentajeOferta);
         this.accessLevel = accessLevel;
     }
 
@@ -19,6 +20,15 @@ public class Subscripcion {
         this.nombre = nombre;
         this.precio = precio;
         this.accessLevel = new AccessLevel(accessLevel);
+    }
+
+    public Subscripcion(int id, String nombre) {
+        this.id = id;
+        this.nombre = nombre;
+    }
+
+    public Subscripcion(int id) {
+        this.id = id;
     }
 
     public int getPorcentajeOferta() {
@@ -67,5 +77,21 @@ public class Subscripcion {
 
     public void setAccessLevel(AccessLevel accessLevel) {
         this.accessLevel = accessLevel;
+    }
+
+    @Override
+    public int compareTo(Subscripcion subscripcion) {
+        int result = (-1) * getAccessLevel().compareTo(subscripcion.getAccessLevel());
+        if(result == 0)
+            result = getNombre().compareTo(subscripcion.getNombre());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof Subscripcion)
+            return getId() == ((Subscripcion) obj).getId();
+        else
+            return false;
     }
 }

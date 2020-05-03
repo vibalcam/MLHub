@@ -3,6 +3,8 @@ package dominio;
 import java.util.regex.Pattern;
 
 public class Usuario {
+    public static final int ADMIN_ID = 0;
+
     private int id;
     private String nombre;
     private String apellidos;
@@ -19,6 +21,10 @@ public class Usuario {
 
     public Usuario(int id, String nombre, String apellidos, Credentials credentials) {
         this(id,nombre, apellidos,credentials,new AccessLevel(AccessLevel.REGISTERED_LEVEL));
+    }
+
+    public Usuario(int id) {
+        this(id,null,null,null);
     }
 
     public int getId() {

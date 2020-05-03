@@ -47,9 +47,9 @@ public class AccesoServlet extends HttpServlet {
     }
 
     private void acceder(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String usuario = request.getParameter("usuario");
+        String nombreUsuario = request.getParameter("usuario");
         String pwd = request.getParameter("pwd");
-        if(usuario == null || pwd == null || usuario.isBlank() || pwd.isBlank()) {
+        if(nombreUsuario == null || pwd == null || nombreUsuario.isBlank() || pwd.isBlank()) {
             accesoIlegal(request,response);
             return;
         }
@@ -57,16 +57,22 @@ public class AccesoServlet extends HttpServlet {
         MLDao dao = null;
         try {
             dao = MLDao.getInstance();
-            if(dao.checkUser(new Usuario.Credentials(usuario,pwd))) {
-                if(Boolean.parseBoolean(request.getParameter("remember"))) {
-                    Cookie cookie = new Cookie("remember",usuario);
+            Usuario usuario = dao.checkAndGetUserInfo(new Usuario.Credentials(nombreUsuario,pwd));
+            if(usuario != null) {
+                Cookie cookie = new Cookie("remember",nombreUsuario);
+                if(Boolean.parseBoolean(request.getParameter("remember")))
                     cookie.setMaxAge(Integer.MAX_VALUE);
-                    cookie.setHttpOnly(true);
-                    response.addCookie(cookie);
-                }
+                else
+                    cookie.setMaxAge(0);
+                cookie.setHttpOnly(true);
+                response.addCookie(cookie);
+
+                // Guardamos el usuario en la sesion para su posterior uso y no tener que volver a introducir las
+                // credenciales
                 HttpSession session = request.getSession();
                 session.setAttribute(USER_LOGGED,usuario);
-                response.sendRedirect(getServletContext().getContextPath() + "/inicio");
+//                response.sendRedirect(getServletContext().getContextPath() + "/inicio"); todo simulacion
+                simularAccederSubscripciones(request,response, dao);
             } else {
                 request.setAttribute(KEY_ERROR,MSG_CREDENTIALS_ERROR);
                 request.getRequestDispatcher("/").forward(request,response);
@@ -85,5 +91,12 @@ public class AccesoServlet extends HttpServlet {
                 }
             }
         }
+    }
+
+    private void simularAccederSubscripciones(HttpServletRequest request, HttpServletResponse response, MLDao dao) throws IOException, SQLException, ServletException {
+        request.setAttribute(AdminServlet.ATRIB_MAS_COMPRADOS,dao.getSubscripcionesMasCompradas(10));
+        request.setAttribute("fechaMasCompra",dao.getFechaMaxCompras(10));
+        request.setAttribute("productos",dao.getSubscripciones());
+        request.getRequestDispatcher("/inicio/admin").forward(request,response);
     }
 }
