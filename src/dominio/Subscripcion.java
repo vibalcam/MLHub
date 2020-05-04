@@ -15,7 +15,13 @@ public class Subscripcion implements Comparable<Subscripcion> {
         this.accessLevel = accessLevel;
     }
 
-    public Subscripcion(int id, String nombre, int precio, int accessLevel) {
+    public Subscripcion(String nombre, double precio, int accessLevel) {
+        this.nombre = nombre;
+        this.precio = precio;
+        this.accessLevel = new AccessLevel(accessLevel);
+    }
+
+    public Subscripcion(int id, String nombre, double precio, int accessLevel) {
         this.id = id;
         this.nombre = nombre;
         this.precio = precio;

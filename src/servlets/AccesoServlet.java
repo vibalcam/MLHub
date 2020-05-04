@@ -94,9 +94,10 @@ public class AccesoServlet extends HttpServlet {
     }
 
     private void simularAccederSubscripciones(HttpServletRequest request, HttpServletResponse response, MLDao dao) throws IOException, SQLException, ServletException {
-        request.setAttribute(AdminServlet.ATRIB_MAS_COMPRADOS,dao.getSubscripcionesMasCompradas(10));
-        request.setAttribute("fechaMasCompra",dao.getFechaMaxCompras(10));
-        request.setAttribute("productos",dao.getSubscripciones());
-        request.getRequestDispatcher("/inicio/admin").forward(request,response);
+//        request.setAttribute(AdminServlet.ATRIB_MAX_PRODUCTOS,dao.getSubscripcionesMasCompradas(10));
+//        request.setAttribute(AdminServlet.ATRIB_MAX_FECHA,dao.getFechaMaxCompras(10));
+//        request.setAttribute(AdminServlet.ATRIB_PRODUCTOS,dao.getSubscripciones());
+//        request.getRequestDispatcher("/inicio/admin").forward(request,response);
+        response.sendRedirect(getServletContext().getContextPath() + "/inicio/admin");
     }
 }

@@ -11,7 +11,7 @@
         <!-- Bootstrap css -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         <!-- Custom css -->
-        <link rel="stylesheet" href="styles/styleSidebar.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/styleSidebar.css">
 
         <title>Portal de Admin</title>
     </head>
@@ -144,10 +144,10 @@
                             <div class="w-100 d-block d-lg-none"></div>
                             <form class="col form-row justify-content-end" name="dateFechas" id="dateFechas">
                                 <div class="col-lg-auto col-md-6">
-                                    <input name="inicio" type="date" class="form-control datepickerStart" placeholder="Inicio">
+                                    <input id="inicioMaxFecha" name="inicio" type="date" class="datepicker-fecha form-control datepickerStart" placeholder="Inicio">
                                 </div>
                                 <div class="col-lg-auto col-md-6">
-                                    <input name="fin" type="date" class="form-control datepickerEnd" placeholder="Final">
+                                    <input id="finMaxFecha" name="fin" type="date" class="datepicker-fecha form-control datepickerEnd" placeholder="Final">
                                 </div>
                             </form>
                         </div>
@@ -160,14 +160,8 @@
                                         <th scope="col">Cantidad vendida</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <c:forEach varStatus="loop" var="compra" items="${requestScope.fechaMasCompra}">
-                                        <tr>
-                                            <th scope="row">${loop.count}</th>
-                                            <td><fmt:formatDate value="${compra.fecha.time}" type="date" dateStyle="short" /></td>
-                                            <td>${compra.cantidad}</td>
-                                        </tr>
-                                    </c:forEach>
+                                <tbody id="maxComprasFechas">
+                                    <jsp:include page="/admin/maxComprasFechas.jsp"/>
                                 </tbody>
                             </table>
                         </div>
@@ -185,6 +179,7 @@
                         <div id="catalogoDisponibles" class="row">
                             <h3 class="col">Productos disponibles</h3>
                             <div class="w-100 d-block d-lg-none"></div>
+<%--                            todo si me apetece o quitar sino--%>
                             <form class="mr-2 col form-row justify-content-end" name="buscarProductos" id="buscarProductos">
                                 <div class="col">
                                     <input type="text" name="nombre" class="form-control" placeholder="Nombre">
@@ -193,41 +188,23 @@
                                 <button type="submit" class="btn btn-outline-success col-auto">Buscar</button>
                             </form>
                         </div>
-                        <div class="bg-warning my-2 p-1 rounded" id="textChgProductos">
-                            Se ha realizado una modificación en los productos
+                        <div class="my-2 p-1 rounded bg-info" id="textChgProductos">
+                            Para crear nuevos niveles de acceso debe contactar con soporte
                         </div>
                         <div class="border border-dark rounded mt-2">
-                            <form id="formModProductos" name="formModProductos" method="post" action="${pageContext.request.contextPath}/inicio/admin">
-                                <table class="table table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">Nivel</th>
-                                            <th scope="col">Nombre</th>
-                                            <th scope="col">Precio (€)</th>
-                                            <th scope="col">Acciones</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <c:forEach varStatus="loop" var="subs" items="${requestScope.productos}">
-                                            <tr>
-                                                <th scope="row"><input type="number" min="0" class="form-control input-sm input-change" placeholder="Nivel" name="nivel" value="${subs.accessLevel.id}"></th>
-                                                <td><input type="text" class="form-control input-sm input-change" placeholder="Nombre" name="nombre" value="${subs.nombre}"></td>
-                                                <td><input type="number" min="0" class="form-control input-sm input-change" placeholder="Precio" name="precio" value="${subs.precio}"></td>
-                                                <td>
-                                                    <button type="submit" class="btn btn-outline-secondary mb-1" name="action" value="chgProducto">Modificar</button>
-                                                    <button type="submit" class="btn btn-outline-danger mb-1" name="action" value="delProducto">Eliminar</button>
-                                                </td>
-                                            </tr>
-                                        </c:forEach>
-                                        <tr>
-                                            <th scope="row"><input type="number" min="0" class="form-control input-sm" placeholder="Nivel" name="nivel"></th>
-                                            <td><input type="text" class="form-control input-sm" placeholder="Nombre" name="nombre"></td>
-                                            <td><input type="number" min="0" class="form-control input-sm" placeholder="Precio" name=""></td>
-                                            <td><button type="submit" class="btn btn-outline-success" name="add">Añadir</button></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </form>
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Nivel</th>
+                                        <th scope="col">Nombre</th>
+                                        <th scope="col">Precio (€)</th>
+                                        <th scope="col">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="mostrarProductos">
+                                    <jsp:include page="/admin/mostrarProductos.jsp"/>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                     
@@ -263,17 +240,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <c:forEach var="subs" items="${requestScope.productos}">
-                                            <c:if test="${subs.porcentajeOferta != 0}">
-                                                <tr>
-                                                    <td>${subs.nombre}</td>
-                                                    <td>${subs.precio}</td>
-                                                    <td>${subs.porcentajeOferta}</td>
-                                                    <td class="d-none d-sm-block">${subs.precioReal}</td>
-                                                    <td><button type="submit" class="btn btn-outline-danger" name="del">Eliminar</button></td>
-                                                </tr>
-                                            </c:if>
-                                        </c:forEach>
+                                        <jsp:include page="/admin/mostrarOfertas.jsp"/>
                                     </tbody>
                                 </table>
                             </form>
@@ -287,12 +254,12 @@
         <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
         <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
         <!-- JQuery -->
-        <script src="scripts/jquery-3.3.1.js"></script>
+        <script src="${pageContext.request.contextPath}/scripts/jquery-3.3.1.js"></script>
         <!-- Bootstrap js -->
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
         <!-- Custom js -->
-        <script src="scripts/adminScript.js"></script>
+        <script src="${pageContext.request.contextPath}/scripts/adminScript.js"></script>
     </body>
 </html>

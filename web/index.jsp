@@ -3,9 +3,9 @@
 <!DOCTYPE html>
 <html lang="es">
     <%-- Si ya ha iniciado sesion accede directamente--%>
-<%--    <c:if test="${not empty sessionScope.userLogged}"> todo quitar tras periodo de test--%>
-<%--        <c:redirect url="/inicio"/>--%>
-<%--    </c:if>--%>
+    <c:if test="${not empty sessionScope.userLogged}">
+        <c:redirect url="/inicio"/>
+    </c:if>
 
     <head>
         <!-- Bootstrap css -->

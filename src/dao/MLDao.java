@@ -156,7 +156,7 @@ public class MLDao {
 
     public void updateUserInfo(Usuario usuario) throws SQLException {
         if(usuario.getId() == Usuario.ADMIN_ID || usuario.getAccessLevel().getId() == AccessLevel.ADMIN_LEVEL)
-            throw new IllegalArgumentException("Operacion no posible: consulte con soporte para mayor informacion");
+            throw new IllegalArgumentException("No se puede modificar el usuario admin ni dar acceso de admin");
 
         PreparedStatement modifyStatement = connection.prepareStatement(
                 "UPDATE users SET nombre=?,apellidos=?,subscripcion=? WHERE id=?");
@@ -207,9 +207,27 @@ public class MLDao {
     }
 
     public List<Compra> getFechaMaxCompras(int number) throws SQLException {
+//        PreparedStatement statement = connection.prepareStatement("SELECT c.fecha,COUNT(c.id) AS sumCantidad " +
+//                "FROM compras AS c GROUP BY c.fecha ORDER BY sumCantidad DESC LIMIT ?");
+//        statement.setInt(1,number);
+//
+//        ResultSet resultSet = statement.executeQuery();
+//        ArrayList<Compra> list = new ArrayList<>();
+//        while (resultSet.next())
+//            list.add(getFechaCompraFromResultSet(resultSet));
+//
+//        resultSet.close();
+//        statement.close();
+//        return list;
+        return getFechaMaxCompras(number,null,null);
+    }
+
+    public List<Compra> getFechaMaxCompras(int number, Calendar inicio, Calendar fin) throws SQLException {
         PreparedStatement statement = connection.prepareStatement("SELECT c.fecha,COUNT(c.id) AS sumCantidad " +
-                "FROM compras AS c GROUP BY c.fecha ORDER BY sumCantidad DESC LIMIT ?");
-        statement.setInt(1,number);
+                "FROM compras AS c WHERE c.fecha BETWEEN ? AND ? GROUP BY c.fecha ORDER BY sumCantidad DESC LIMIT ?");
+        statement.setDate(1,inicio == null ? new Date(1) : new Date(inicio.getTimeInMillis()),CALENDAR);
+        statement.setDate(2,fin == null ? new Date(Calendar.getInstance().getTimeInMillis()) : new Date(fin.getTimeInMillis()), CALENDAR);
+        statement.setInt(3,number);
 
         ResultSet resultSet = statement.executeQuery();
         ArrayList<Compra> list = new ArrayList<>();
@@ -219,6 +237,48 @@ public class MLDao {
         resultSet.close();
         statement.close();
         return list;
+    }
+
+    // Cambios a productos
+    public void updateProducto(Subscripcion subscripcion) throws SQLException {
+        if(subscripcion.getAccessLevel().getId() == AccessLevel.ADMIN_LEVEL)
+            throw new IllegalArgumentException("No se puede asignar acceso de nivel de admin");
+
+        PreparedStatement modifyStatement = connection.prepareStatement(
+                "UPDATE productos SET nombre=?,precio=?,accessLevel=? WHERE id=?");
+        modifyStatement.setString(1,subscripcion.getNombre());
+        modifyStatement.setDouble(2,subscripcion.getPrecio());
+        modifyStatement.setInt(3,subscripcion.getAccessLevel().getId());
+        modifyStatement.setInt(4,subscripcion.getId());
+
+        if(modifyStatement.executeUpdate() > 1)
+            throw new SQLException("Resultado inesperado: más de una coincidencia");
+
+        modifyStatement.close();
+        modifyStatement.close();
+    }
+
+    public void deleteProducto(Subscripcion subscripcion) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement("DELETE FROM productos WHERE id=?");
+        statement.setInt(1,subscripcion.getId());
+
+        if(statement.executeUpdate() > 1)
+            throw new SQLException("Resultado inesperado: más de una coincidencia");
+        statement.close();
+    }
+
+    public void addProducto(Subscripcion subscripcion) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement(
+                "INSERT INTO productos (nombre,precio,accessLevel) VALUES (?,?,?)");
+
+        statement.setString(1,subscripcion.getNombre());
+        statement.setDouble(2,subscripcion.getPrecio());
+        statement.setInt(3,subscripcion.getAccessLevel().getId());
+
+        int result = statement.executeUpdate();
+        statement.close();
+        if(result == 0)
+            throw new SQLException("No se ha podido insertar debido a un fallo inesperado");
     }
 
     // Helper methods

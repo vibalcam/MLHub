@@ -35,6 +35,6 @@
 
     <servlet-mapping>
         <servlet-name>Admin</servlet-name>
-        <url-pattern>/inicio/admin</url-pattern>
+        <url-pattern>/inicio/admin/view</url-pattern>
     </servlet-mapping>
 </web-app>
