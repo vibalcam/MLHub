@@ -35,8 +35,6 @@ public class AdminServlet extends HttpServlet {
             request.setAttribute(AdminServlet.ATRIB_MAX_FECHA,dao.getFechaMaxCompras(10));
             request.setAttribute(AdminServlet.ATRIB_PRODUCTOS,dao.getSubscripciones());
             request.getRequestDispatcher("/inicio/admin/view").forward(request,response);
-
-            dao.close();
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         } finally {
@@ -57,6 +55,7 @@ public class AdminServlet extends HttpServlet {
 
         MLDao dao = null;
         Subscripcion subscripcion;
+        String nombre,id,precio,accessLevel,oferta;
         try {
             dao = MLDao.getInstance();
 
@@ -76,23 +75,40 @@ public class AdminServlet extends HttpServlet {
                     break;
 
                 case "changeProducto":
+                    nombre = request.getParameter("nombre");
+                    id = request.getParameter("id");
+                    precio = request.getParameter("precio");
+                    accessLevel = request.getParameter("accessLevel");
+                    if(nombre == null || id == null || precio == null || accessLevel == null) {
+                        sendParamError(response);
+                        return;
+                    }
+
                     dao.updateProducto(new Subscripcion(
-                            Integer.parseInt(request.getParameter("id")),
-                            request.getParameter("nombre"),
-                            Double.parseDouble(request.getParameter("precio")),
-                            Integer.parseInt(request.getParameter("accessLevel"))
-                    ));
+                            Integer.parseInt(id), nombre, Double.parseDouble(precio), Integer.parseInt(accessLevel)));
                     mostrarProductos(request,response,dao);
                     break;
 
                 case "deleteProducto":
-                    dao.deleteProducto(new Subscripcion(Integer.parseInt(request.getParameter("id"))));
+                    id = request.getParameter("id");
+                    if(id == null) {
+                        sendParamError(response);
+                        return;
+                    }
+
+                    dao.deleteProducto(new Subscripcion(Integer.parseInt(id)));
                     mostrarProductos(request,response,dao);
                     break;
 
                 case "addProducto":
+                    nombre = request.getParameter("nombre");
+                    if(nombre == null || nombre.isBlank()) {
+                        sendParamError(response);
+                        return;
+                    }
+
                     dao.addProducto(new Subscripcion(
-                            request.getParameter("nombre"),
+                            nombre,
                             Double.parseDouble(request.getParameter("precio")),
                             Integer.parseInt(request.getParameter("accessLevel"))
                     ));
@@ -100,13 +116,25 @@ public class AdminServlet extends HttpServlet {
                     break;
 
                 case "searchProductos":
-                    String filtro = "%" + request.getParameter("filtro") + "%";
+                    nombre = request.getParameter("filtro");
+                    if(nombre == null) {
+                        sendParamError(response);
+                        return;
+                    }
+
+                    String filtro = "%" + nombre + "%";
                     request.setAttribute(ATRIB_PRODUCTOS,dao.getSubscripciones(filtro));
                     request.getRequestDispatcher("/admin/mostrarProductos.jsp").forward(request,response);
                     break;
 
                 case "deleteOferta":
-                    subscripcion = new Subscripcion(Integer.parseInt(request.getParameter("id")));
+                    id = request.getParameter("id");
+                    if(id == null) {
+                        sendParamError(response);
+                        return;
+                    }
+
+                    subscripcion = new Subscripcion(Integer.parseInt(id));
                     subscripcion.setPorcentajeOferta(0);
                     if(dao.updateOferta(subscripcion))
                         mostrarOfertas(request,response,dao);
@@ -115,8 +143,15 @@ public class AdminServlet extends HttpServlet {
                     break;
 
                 case "addOferta":
-                    subscripcion = new Subscripcion(request.getParameter("nombre"));
-                    subscripcion.setPorcentajeOferta(Integer.parseInt(request.getParameter("oferta")));
+                    nombre = request.getParameter("nombre");
+                    oferta = request.getParameter("oferta");
+                    if(nombre == null || nombre.isBlank() || oferta == null) {
+                        sendParamError(response);
+                        return;
+                    }
+
+                    subscripcion = new Subscripcion(nombre);
+                    subscripcion.setPorcentajeOferta(Integer.parseInt(oferta));
                     if(dao.updateOfertaByName(subscripcion))
                         mostrarOfertas(request,response,dao);
                     else
@@ -126,7 +161,7 @@ public class AdminServlet extends HttpServlet {
                 default:
                     response.sendError(400,"Petición no reconocida");
             }
-        } catch (SQLException | ClassNotFoundException | ParseException e) {
+        } catch (SQLException | ClassNotFoundException | ParseException | IllegalArgumentException e) {
             e.printStackTrace();
             response.sendError(400,"No se pudo realizar la operación debido a una petición errónea");
         } finally {
@@ -148,5 +183,9 @@ public class AdminServlet extends HttpServlet {
     private void mostrarOfertas(HttpServletRequest request, HttpServletResponse response, MLDao dao) throws SQLException, ServletException, IOException {
         request.setAttribute(ATRIB_PRODUCTOS,dao.getSubscripciones());
         request.getRequestDispatcher("/admin/mostrarOfertas.jsp").forward(request,response);
+    }
+
+    private void sendParamError(HttpServletResponse response) throws IOException {
+        response.sendError(400,"No se pudo realizar la operación debido a una petición errónea");
     }
 }

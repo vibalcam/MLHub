@@ -2,6 +2,20 @@
     margin: auto;
 }
 
+body {
+    font-size: 1vw;
+}
+
+.precioAnterior {
+    text-decoration: line-through;
+    color: darkred;
+}
+
+.precioOferta {
+    color: green;
+    font-weight: bold;
+}
+
 #error {
     width: 60%;
     border: 0.1vw solid #d9534f;
@@ -9,10 +23,6 @@
     background-color: #d9534f;
     color: white;
     padding: 0.5vw 2.5vw 0.5vw 2.5vw;
-}
-
-body {
-    font-size: 1vw;
 }
 
 .icon {
@@ -32,7 +42,7 @@ body {
     width: 80%;
 }
 
-.table-columns {
+table {
     width: 100%;
     table-layout: fixed;
     border-collapse: collapse;
@@ -41,20 +51,20 @@ body {
     padding: 1vw;
 }
 
-.table-columns tr th {
+table tr th {
     padding: 1.5vw 0 1.5vw 0;
 }
 
-.table-columns tr th,
-.table-columns tr td {
+table tr th,
+table tr td {
     border-bottom: 1px solid rgb(172, 172, 172);
 }
 
-.table-columns thead tr th {
+table thead tr th {
     border-bottom: 2px solid rgb(172, 172, 172);
 }
 
-.table-columns tr:hover {
+table tr:hover {
     color: #fff;
     background: #969696;
 }
@@ -68,10 +78,10 @@ body {
 }
 
 .boton-precio {
-    padding: 2vw;
+    height: 4vw;
     width: 100%;
     font-weight: bold;
-    font-size: large;
+    font-size: 0.75vw;
 }
 
 .boton-precio:hover {

@@ -27,20 +27,16 @@ public class MainServlet extends HttpServlet {
             case "searchEntry":
                 search(request, response);
                 return;
+
             case "subs":
-//                accederSubscripciones(request,response);
+                response.sendRedirect(getServletContext().getContextPath() + "/inicio/subscripcion");
                 return;
+
             case "cerrarSesion":
                 request.getSession().invalidate();
                 response.sendRedirect(getServletContext().getContextPath());
                 return;
         }
-    }
-
-    private void accederSubscripciones(HttpServletRequest request, HttpServletResponse response, MLDao dao) throws IOException, SQLException, ServletException {
-        request.setAttribute("subscripciones",dao.getSubscripciones());
-        request.getRequestDispatcher("/inicio/subscripcion").forward(request,response);
-        //todo acceder a subscripciones, debe tener el dao
     }
 
     private void search(HttpServletRequest request, HttpServletResponse response) {

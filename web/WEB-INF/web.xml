@@ -25,7 +25,7 @@
 
     <servlet-mapping>
         <servlet-name>Subscripcion</servlet-name>
-        <url-pattern>/inicio/subscripcion</url-pattern>
+        <url-pattern>/inicio/subscripcion/view</url-pattern>
     </servlet-mapping>
 
     <servlet>

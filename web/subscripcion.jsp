@@ -14,8 +14,9 @@
         <div id="content" class="center">
             <h1 id="title" class="textCenter">Elige tu subscripción</h1>
             <br>
-            <form id="form-precios" name="form-precios" method="post" action="${pageContext.request.contextPath}/inicio/subscripcion/procesar">
-                <table class="center table-columns">
+            <form id="form-precios" name="form-precios" method="post"
+                  action="${pageContext.request.contextPath}/inicio/subscripcion">
+                <table class="center">
                     <thead>
                         <tr>
                             <th scope="col">Características</th>
@@ -87,7 +88,17 @@
                             <c:forEach var="subs" items="${subscripciones}">
                                 <td class="center">
                                     <button class="boton-precio" type="submit" name="subsId" value="${subs.id}">
-                                        ${subs.precio} €/mes
+                                        <c:choose>
+                                            <c:when test="${subs.porcentajeOferta != 0}">
+                                                <span class="precioAnterior">${subs.precio} €/mes</span>
+                                                <br>
+                                                <br>
+                                                <span class="precioOferta">${subs.precioReal} €/mes</span>
+                                            </c:when>
+                                            <c:otherwise>
+                                                ${subs.precio} €/mes
+                                            </c:otherwise>
+                                        </c:choose>
                                     </button>
                                 </td>
                             </c:forEach>

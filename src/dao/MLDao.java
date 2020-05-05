@@ -258,6 +258,8 @@ public class MLDao {
     public void updateProducto(Subscripcion subscripcion) throws SQLException {
         if(subscripcion.getAccessLevel().getId() == AccessLevel.ADMIN_LEVEL)
             throw new IllegalArgumentException("No se puede asignar acceso de nivel de admin");
+        else if(subscripcion.getNombre() == null || subscripcion.getNombre().isBlank())
+            throw new IllegalArgumentException("El nombre no puede estar en blanco");
 
         PreparedStatement modifyStatement = connection.prepareStatement(
                 "UPDATE productos SET nombre=?,precio=?,accessLevel=? WHERE id=?");
