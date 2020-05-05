@@ -71,13 +71,12 @@ public class AccesoServlet extends HttpServlet {
                 // credenciales
                 HttpSession session = request.getSession();
                 session.setAttribute(USER_LOGGED,usuario);
-//                response.sendRedirect(getServletContext().getContextPath() + "/inicio"); todo simulacion
-                simularAccederSubscripciones(request,response, dao);
+                response.sendRedirect(getServletContext().getContextPath() + "/inicio");
+//                simularAcceso(request,response, dao);
             } else {
                 request.setAttribute(KEY_ERROR,MSG_CREDENTIALS_ERROR);
                 request.getRequestDispatcher("/").forward(request,response);
             }
-            dao.close();
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
             request.setAttribute(KEY_ERROR,MSG_UNKNOWN_ERROR);
@@ -93,11 +92,11 @@ public class AccesoServlet extends HttpServlet {
         }
     }
 
-    private void simularAccederSubscripciones(HttpServletRequest request, HttpServletResponse response, MLDao dao) throws IOException, SQLException, ServletException {
-//        request.setAttribute(AdminServlet.ATRIB_MAX_PRODUCTOS,dao.getSubscripcionesMasCompradas(10));
-//        request.setAttribute(AdminServlet.ATRIB_MAX_FECHA,dao.getFechaMaxCompras(10));
-//        request.setAttribute(AdminServlet.ATRIB_PRODUCTOS,dao.getSubscripciones());
-//        request.getRequestDispatcher("/inicio/admin").forward(request,response);
-        response.sendRedirect(getServletContext().getContextPath() + "/inicio/admin");
-    }
+//    private void simularAcceso(HttpServletRequest request, HttpServletResponse response, MLDao dao) throws IOException, SQLException, ServletException {
+////        request.setAttribute(AdminServlet.ATRIB_MAX_PRODUCTOS,dao.getSubscripcionesMasCompradas(10));
+////        request.setAttribute(AdminServlet.ATRIB_MAX_FECHA,dao.getFechaMaxCompras(10));
+////        request.setAttribute(AdminServlet.ATRIB_PRODUCTOS,dao.getSubscripciones());
+////        request.getRequestDispatcher("/inicio/admin").forward(request,response);
+//        response.sendRedirect(getServletContext().getContextPath() + "/inicio/admin");
+//    }
 }

@@ -1,7 +1,9 @@
 package dominio;
 
 public class Subscripcion implements Comparable<Subscripcion> {
-    private int id;
+    private static final int NO_ID = -1;
+
+    private int id = NO_ID;
     private String nombre;
     private double precio;
     private int porcentajeOferta;
@@ -30,6 +32,10 @@ public class Subscripcion implements Comparable<Subscripcion> {
 
     public Subscripcion(int id, String nombre) {
         this.id = id;
+        this.nombre = nombre;
+    }
+
+    public Subscripcion(String nombre) {
         this.nombre = nombre;
     }
 

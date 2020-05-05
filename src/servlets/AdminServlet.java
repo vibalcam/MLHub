@@ -1,7 +1,9 @@
 package servlets;
 
 import dao.MLDao;
+import dominio.AccessLevel;
 import dominio.Subscripcion;
+import dominio.Usuario;
 import util.Util;
 
 import javax.servlet.ServletException;
@@ -19,7 +21,11 @@ public class AdminServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        //todo comprobar if admin permission
+        Usuario loggedUser = (Usuario) request.getSession().getAttribute(AccesoServlet.USER_LOGGED);
+        if(loggedUser.getAccessLevel().getId() != AccessLevel.ADMIN_LEVEL) {
+            response.sendError(400, "No tiene acceso de administrador: acceso denegado");
+            return;
+        }
 
         MLDao dao = null;
         try {
@@ -50,6 +56,7 @@ public class AdminServlet extends HttpServlet {
             return;
 
         MLDao dao = null;
+        Subscripcion subscripcion;
         try {
             dao = MLDao.getInstance();
 
@@ -59,52 +66,69 @@ public class AdminServlet extends HttpServlet {
                             Util.parseDate(request.getParameter("fechaInicio")),
                             Util.parseDate(request.getParameter("fechaFin"))));
                     request.getRequestDispatcher("/admin/maxComprasProductos.jsp").forward(request,response);
-                    return;
+                    break;
 
                 case "getMaxFechas":
                     request.setAttribute(ATRIB_MAX_FECHA,dao.getFechaMaxCompras(10,
                             Util.parseDate(request.getParameter("fechaInicio")),
                             Util.parseDate(request.getParameter("fechaFin"))));
                     request.getRequestDispatcher("/admin/maxComprasFechas.jsp").forward(request,response);
-                    return;
+                    break;
 
                 case "changeProducto":
-                    try {
-                        dao.updateProducto(new Subscripcion(
-                                Integer.parseInt(request.getParameter("id")),
-                                request.getParameter("nombre"),
-                                Double.parseDouble(request.getParameter("precio")),
-                                Integer.parseInt(request.getParameter("accessLevel"))
-                        ));
-                    } finally {
-                        mostrarProductos(request,response,dao);
-                    }
-                    return;
+                    dao.updateProducto(new Subscripcion(
+                            Integer.parseInt(request.getParameter("id")),
+                            request.getParameter("nombre"),
+                            Double.parseDouble(request.getParameter("precio")),
+                            Integer.parseInt(request.getParameter("accessLevel"))
+                    ));
+                    mostrarProductos(request,response,dao);
+                    break;
 
                 case "deleteProducto":
-                    try {
-                        dao.deleteProducto(new Subscripcion(Integer.parseInt(request.getParameter("id"))));
-                    } finally {
-                        mostrarProductos(request,response,dao);
-                    }
-                    return;
+                    dao.deleteProducto(new Subscripcion(Integer.parseInt(request.getParameter("id"))));
+                    mostrarProductos(request,response,dao);
+                    break;
 
                 case "addProducto":
-                    try {
-                        dao.addProducto(new Subscripcion(
-                                request.getParameter("nombre"),
-                                Double.parseDouble(request.getParameter("precio")),
-                                Integer.parseInt(request.getParameter("accessLevel"))
-                        ));
-                    } finally {
-                        mostrarProductos(request,response,dao);
-                    }
-                    return;
-            }
+                    dao.addProducto(new Subscripcion(
+                            request.getParameter("nombre"),
+                            Double.parseDouble(request.getParameter("precio")),
+                            Integer.parseInt(request.getParameter("accessLevel"))
+                    ));
+                    mostrarProductos(request,response,dao);
+                    break;
 
-            dao.close();
+                case "searchProductos":
+                    String filtro = "%" + request.getParameter("filtro") + "%";
+                    request.setAttribute(ATRIB_PRODUCTOS,dao.getSubscripciones(filtro));
+                    request.getRequestDispatcher("/admin/mostrarProductos.jsp").forward(request,response);
+                    break;
+
+                case "deleteOferta":
+                    subscripcion = new Subscripcion(Integer.parseInt(request.getParameter("id")));
+                    subscripcion.setPorcentajeOferta(0);
+                    if(dao.updateOferta(subscripcion))
+                        mostrarOfertas(request,response,dao);
+                    else
+                        response.sendError(400,"No se pudo realizar la operación debido a una petición errónea");
+                    break;
+
+                case "addOferta":
+                    subscripcion = new Subscripcion(request.getParameter("nombre"));
+                    subscripcion.setPorcentajeOferta(Integer.parseInt(request.getParameter("oferta")));
+                    if(dao.updateOfertaByName(subscripcion))
+                        mostrarOfertas(request,response,dao);
+                    else
+                        response.sendError(400,"No se pudo realizar la operación debido a una petición errónea");
+                    break;
+
+                default:
+                    response.sendError(400,"Petición no reconocida");
+            }
         } catch (SQLException | ClassNotFoundException | ParseException e) {
             e.printStackTrace();
+            response.sendError(400,"No se pudo realizar la operación debido a una petición errónea");
         } finally {
             if(dao != null) {
                 try {
@@ -119,5 +143,10 @@ public class AdminServlet extends HttpServlet {
     private void mostrarProductos(HttpServletRequest request, HttpServletResponse response, MLDao dao) throws SQLException, ServletException, IOException {
         request.setAttribute(ATRIB_PRODUCTOS,dao.getSubscripciones());
         request.getRequestDispatcher("/admin/mostrarProductos.jsp").forward(request,response);
+    }
+
+    private void mostrarOfertas(HttpServletRequest request, HttpServletResponse response, MLDao dao) throws SQLException, ServletException, IOException {
+        request.setAttribute(ATRIB_PRODUCTOS,dao.getSubscripciones());
+        request.getRequestDispatcher("/admin/mostrarOfertas.jsp").forward(request,response);
     }
 }

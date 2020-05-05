@@ -86,10 +86,26 @@ public class MLDao {
     }
 
     public List<Subscripcion> getSubscripciones() throws SQLException {
-        Statement statement = connection.createStatement();
-        ResultSet resultSet = statement.executeQuery("SELECT * FROM productos AS p " +
+//        Statement statement = connection.createStatement();
+//        ResultSet resultSet = statement.executeQuery("SELECT * FROM productos AS p " +
+//                "LEFT JOIN access_level AS a ON p.accessLevel=a.id " +
+//                "WHERE a.id!=0 ORDER BY p.accessLevel DESC");
+//        ArrayList<Subscripcion> subscripcions = new ArrayList<>();
+//        while (resultSet.next())
+//            subscripcions.add(getSubscripcionFromResultSet(resultSet));
+//        resultSet.close();
+//        statement.close();
+//        return subscripcions;
+        return getSubscripciones("%");
+    }
+
+    public List<Subscripcion> getSubscripciones(String filtro) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement("SELECT * FROM productos AS p " +
                 "LEFT JOIN access_level AS a ON p.accessLevel=a.id " +
-                "WHERE a.id!=0 ORDER BY p.accessLevel DESC");
+                "WHERE a.id!=0 AND p.nombre LIKE ? ORDER BY p.accessLevel DESC");
+        statement.setString(1,filtro);
+
+        ResultSet resultSet = statement.executeQuery();
         ArrayList<Subscripcion> subscripcions = new ArrayList<>();
         while (resultSet.next())
             subscripcions.add(getSubscripcionFromResultSet(resultSet));
@@ -109,7 +125,6 @@ public class MLDao {
             statement.setInt(1, subscripcion.getId());
             statement.setInt(2, usuario.getId());
             statement.setInt(3, subscripcion.getId());
-            //todo añadir compra
 
             int result = statement.executeUpdate();
             statement.close();
@@ -255,7 +270,6 @@ public class MLDao {
             throw new SQLException("Resultado inesperado: más de una coincidencia");
 
         modifyStatement.close();
-        modifyStatement.close();
     }
 
     public void deleteProducto(Subscripcion subscripcion) throws SQLException {
@@ -281,6 +295,36 @@ public class MLDao {
             throw new SQLException("No se ha podido insertar debido a un fallo inesperado");
     }
 
+    public boolean updateOferta(Subscripcion subscripcion) throws SQLException {
+        PreparedStatement modifyStatement = connection.prepareStatement(
+                "UPDATE productos SET porcentajeOferta=? WHERE id=?");
+        modifyStatement.setInt(1,subscripcion.getPorcentajeOferta());
+        modifyStatement.setInt(2,subscripcion.getId());
+
+        int result = modifyStatement.executeUpdate();
+        modifyStatement.close();
+
+        if(result > 1)
+            throw new SQLException("Resultado inesperado: más de una coincidencia");
+        else
+            return result==1;
+    }
+
+    public boolean updateOfertaByName(Subscripcion subscripcion) throws SQLException {
+        PreparedStatement modifyStatement = connection.prepareStatement(
+                "UPDATE productos SET porcentajeOferta=? WHERE nombre=?");
+        modifyStatement.setInt(1,subscripcion.getPorcentajeOferta());
+        modifyStatement.setString(2,subscripcion.getNombre());
+
+        int result = modifyStatement.executeUpdate();
+        modifyStatement.close();
+
+        if(result > 1)
+        throw new SQLException("Resultado inesperado: más de una coincidencia");
+        else
+            return result==1;
+    }
+
     // Helper methods
     private Calendar calendarFromSQLToDate(java.sql.Date date) {
         Calendar calendar = Calendar.getInstance();
@@ -299,7 +343,7 @@ public class MLDao {
     private Subscripcion getSubscripcionFromResultSet(ResultSet resultSet) throws SQLException {
         return new Subscripcion(
                 resultSet.getInt("p.id"),
-                resultSet.getString("p.nombre"),//todo get ofertas
+                resultSet.getString("p.nombre"),
                 resultSet.getDouble("p.precio"),
                 resultSet.getInt("p.porcentajeOferta"),
                 getAccessLevelFromResultSet(resultSet));

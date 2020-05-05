@@ -7,7 +7,7 @@
             <td>${subs.precio}</td>
             <td>${subs.porcentajeOferta}</td>
             <td class="d-none d-sm-block">${subs.precioReal}</td>
-            <td><button type="submit" class="btn btn-outline-danger" name="del">Eliminar</button></td>
+            <td><button type="button" class="btn btn-outline-danger deleteOferta" value="${subs.id}">Eliminar</button></td>
         </tr>
     </c:if>
 </c:forEach>

@@ -60,7 +60,7 @@ CREATE TABLE `compras` (
   KEY `compras_cliente_idx` (`cliente`),
   CONSTRAINT `compras_cliente` FOREIGN KEY (`cliente`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `compras_producto` FOREIGN KEY (`producto`) REFERENCES `productos` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -69,7 +69,7 @@ CREATE TABLE `compras` (
 
 LOCK TABLES `compras` WRITE;
 /*!40000 ALTER TABLE `compras` DISABLE KEYS */;
-INSERT INTO `compras` VALUES (1,'2020-05-02',2,1),(2,'2020-04-02',1,1),(3,'2020-05-02',2,1);
+INSERT INTO `compras` VALUES (1,'2020-05-02',2,1),(2,'2020-04-02',1,1),(3,'2020-05-02',2,1),(4,'2020-05-03',2,1),(5,'2020-05-03',1,1);
 /*!40000 ALTER TABLE `compras` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -116,7 +116,7 @@ CREATE TABLE `productos` (
   UNIQUE KEY `nombre_UNIQUE` (`nombre`),
   KEY `productos_access_level_idx` (`accessLevel`),
   CONSTRAINT `productos_access_level` FOREIGN KEY (`accessLevel`) REFERENCES `access_level` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -125,7 +125,7 @@ CREATE TABLE `productos` (
 
 LOCK TABLES `productos` WRITE;
 /*!40000 ALTER TABLE `productos` DISABLE KEYS */;
-INSERT INTO `productos` VALUES (0,'admin',0,0,0),(1,'Gratuito',0,0,99),(2,'Pro',10,50,70),(3,'Prime',20,0,50);
+INSERT INTO `productos` VALUES (0,'admin',0,0,0),(1,'Gratuito',0,0,99),(2,'Pro',10,0,70),(3,'Prime',20,75,50);
 /*!40000 ALTER TABLE `productos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -140,7 +140,7 @@ CREATE TABLE `users` (
   `id` int NOT NULL AUTO_INCREMENT,
   `nombre` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `apellidos` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-  `usuario` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `usuario` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_as_cs NOT NULL,
   `password` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `subscripcion` int NOT NULL,
   PRIMARY KEY (`id`),
@@ -169,4 +169,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-05-03 14:35:40
+-- Dump completed on 2020-05-05 13:43:02

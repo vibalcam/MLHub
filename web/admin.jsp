@@ -92,8 +92,8 @@
                                 </li>
                                 <li class="nav-item">
                                     <form id="formCerrarSesion" name="formCerrarSesion" method="post" action="${pageContext.request.contextPath}/inicio">
-                                        <a class="nav-link" href="#">Cerrar sesión</a>
-<%--                                        todo submit with jquery--%>
+                                        <a href="javascript:$('#formCerrarSesion').submit();" id="linkCerrarSesion" class="nav-link">Cerrar sesión</a>
+                                        <input type="hidden" name="action" value="cerrarSesion">
                                     </form>
                                 </li>
                             </ul>
@@ -179,16 +179,15 @@
                         <div id="catalogoDisponibles" class="row">
                             <h3 class="col">Productos disponibles</h3>
                             <div class="w-100 d-block d-lg-none"></div>
-<%--                            todo si me apetece o quitar sino--%>
                             <form class="mr-2 col form-row justify-content-end" name="buscarProductos" id="buscarProductos">
                                 <div class="col">
-                                    <input type="text" name="nombre" class="form-control" placeholder="Nombre">
+                                    <input id="nombreBusquedaProductos" type="text" name="nombre" class="form-control" placeholder="Busqueda">
                                 </div>
                                 
-                                <button type="submit" class="btn btn-outline-success col-auto">Buscar</button>
+                                <button id="searchProductos" type="button" class="btn btn-outline-success col-auto">Buscar</button>
                             </form>
                         </div>
-                        <div class="my-2 p-1 rounded bg-info" id="textChgProductos">
+                        <div class="my-2 p-1 rounded bg-info text-light" id="textChgProductos">
                             Para crear nuevos niveles de acceso debe contactar con soporte
                         </div>
                         <div class="border border-dark rounded mt-2">
@@ -215,20 +214,21 @@
                         <div id="catalogoOfertas" class="row">
                             <h3 class="col">Ofertas disponibles&nbsp&nbsp&nbsp&nbsp&nbsp</h3>
                             <div class="w-100 d-block d-lg-none"></div>
-                            <form class="col" name="addOferta" id="addOferta">
+                            <form class="col" name="addOferta">
                                 <div class="mr-2 form-row justify-content-end">
                                     <div id="inputId" class="col">
-                                        <input type="number" name="id" class="form-control" placeholder="Id">
+                                        <input id="nombreOfertaAdd" type="text" name="nombre" class="form-control" placeholder="Nombre">
                                     </div>
                                     <div class="d-inline col">
-                                        <input type="number" name="oferta" min="0" max="100" class="form-control" placeholder="% Oferta">
+                                        <input id="porcentajeOfertaAdd" type="number" name="oferta" min="0" max="100" class="form-control" placeholder="% Oferta">
                                     </div>
-                                    <button type="submit" class="btn btn-outline-success col">Hacer oferta</button>
+                                    <button id="addOferta" type="button" class="btn btn-outline-success col">Hacer oferta</button>
                                 </div>
                             </form>
                         </div>
+                        <div class="my-2 p-1 rounded bg-warning text-light d-none" id="textChgOfertas"></div>
                         <div class="border border-dark rounded mt-2">
-                            <form id="formOfertas" name="formOfertas" method="post" action="${pageContext.request.contextPath}/inicio/admin">
+                            <form id="formOfertas" name="formOfertas">
                                 <table class="table table-hover">
                                     <thead>
                                         <tr>
@@ -239,7 +239,7 @@
                                             <th scope="col">Eliminar</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody id="mostrarOfertas">
                                         <jsp:include page="/admin/mostrarOfertas.jsp"/>
                                     </tbody>
                                 </table>

@@ -30,7 +30,7 @@ public class MainServlet extends HttpServlet {
             case "subs":
 //                accederSubscripciones(request,response);
                 return;
-            case "cerrar":
+            case "cerrarSesion":
                 request.getSession().invalidate();
                 response.sendRedirect(getServletContext().getContextPath());
                 return;
