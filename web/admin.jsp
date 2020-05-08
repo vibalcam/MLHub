@@ -7,7 +7,7 @@
         <!-- Required meta tags -->
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        
+
         <!-- Bootstrap css -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         <!-- Custom css -->
@@ -120,23 +120,37 @@
                             </form>
                         </div>
                         <div class="border border-dark rounded mt-2">
-                            <table class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col">Nombre</th>
-                                        <th scope="col">Cantidad vendida</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="maxComprasProductos">
-                                    <jsp:include page="/admin/maxComprasProductos.jsp"/>
-                                </tbody>
-                            </table>
+                            <ul class="nav nav-tabs bg-dark text-light" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="dataProductos-tab" data-toggle="tab" href="#dataProductos" role="tab" aria-controls="dataProductos" aria-selected="true">Datos</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="graficoProductos-tab" data-toggle="tab" href="#graficoProductos" role="tab" aria-controls="graficoProductos" aria-selected="false">Gráfico</a>
+                                </li>
+                            </ul>
+                            <div class="tab-content m-3">
+                                <div class="tab-pane fade show active" id="dataProductos" role="tabpanel" aria-labelledby="dataProductos-tab">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">#</th>
+                                                <th scope="col">Nombre</th>
+                                                <th scope="col">Cantidad vendida</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="maxComprasProductos">
+                                            <jsp:include page="/admin/maxComprasProductos.jsp"/>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div style="max-width: 40vw;" class="tab-pane fade" id="graficoProductos" role="tabpanel" aria-labelledby="graficoProductos-tab">
+                                    <canvas id="graficoProductos-canvas"></canvas>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="w-100 d-block d-xl-none"></div>
-                    <br class="w-100 d-block d-xl-none">
+                    <div class="w-100 d-block d-xl-none"><br class="w-100 d-block d-xl-none"></div>
 
                     <div class="col">
                         <div class="row" id="estadisticaFechas">
@@ -152,18 +166,33 @@
                             </form>
                         </div>
                         <div class="border border-dark rounded mt-2">
-                            <table class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col">Fecha</th>
-                                        <th scope="col">Cantidad vendida</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="maxComprasFechas">
-                                    <jsp:include page="/admin/maxComprasFechas.jsp"/>
-                                </tbody>
-                            </table>
+                            <ul class="nav nav-tabs bg-dark text-light" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="dataFechas-tab" data-toggle="tab" href="#dataFechas" role="tab" aria-controls="dataFechas" aria-selected="true">Datos</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="graficoFechas-tab" data-toggle="tab" href="#graficoFechas" role="tab" aria-controls="graficoFechas" aria-selected="false">Gráfico</a>
+                                </li>
+                            </ul>
+                            <div class="tab-content m-3">
+                                <div class="tab-pane fade show active" id="dataFechas" role="tabpanel" aria-labelledby="dataFechas-tab">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">#</th>
+                                                <th scope="col">Fecha</th>
+                                                <th scope="col">Cantidad vendida</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="maxComprasFechas">
+                                            <jsp:include page="/admin/maxComprasFechas.jsp"/>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div style="max-width: 40vw;" class="tab-pane fade" id="graficoFechas" role="tabpanel" aria-labelledby="graficoFechas-tab">
+                                    <canvas id="graficoFechas-canvas"></canvas>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -258,6 +287,8 @@
         <!-- Bootstrap js -->
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+        <!-- MDB core JavaScript -->
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.16.0/js/mdb.min.js"></script>
 
         <!-- Custom js -->
         <script src="${pageContext.request.contextPath}/scripts/adminScript.js"></script>

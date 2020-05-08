@@ -2,12 +2,12 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <c:forEach varStatus="loop" var="subs" items="${requestScope.productos}">
     <tr>
-        <th scope="row"><input id="nivelProducto${subs.id}" type="number" min="0" class="form-control input-sm input-change" placeholder="Nivel" value="${subs.accessLevel.id}"></th>
-        <td><input id="nombreProducto${subs.id}" type="text" class="form-control input-sm input-change" placeholder="Nombre" value="${subs.nombre}"></td>
-        <td><input id="precioProducto${subs.id}" type="number" min="0" class="form-control input-sm input-change" placeholder="Precio" value="${subs.precio}"></td>
+        <th scope="row"><input id="nivelProducto${subs.id}" type="number" min="0" class="form-control input-sm input-change" placeholder="Nivel" value="<c:out value="${subs.accessLevel.id}"/>"></th>
+        <td><input id="nombreProducto${subs.id}" type="text" class="form-control input-sm input-change" placeholder="Nombre" value="<c:out value="${subs.nombre}"/>"></td>
+        <td><input id="precioProducto${subs.id}" type="number" min="0" class="form-control input-sm input-change" placeholder="Precio" value="<c:out value="${subs.precio}"/>"></td>
         <td>
-            <button type="button" class="btn btn-outline-secondary mb-1 changeProducto" value="${subs.id}">Modificar</button>
-            <button type="button" class="btn btn-outline-danger mb-1 deleteProducto" value="${subs.id}">Eliminar</button>
+            <button type="button" class="btn btn-outline-secondary mb-1 changeProducto" value="<c:out value="${subs.id}"/>">Modificar</button>
+            <button type="button" class="btn btn-outline-danger mb-1 deleteProducto" value="<c:out value="${subs.id}"/>">Eliminar</button>
         </td>
     </tr>
 </c:forEach>

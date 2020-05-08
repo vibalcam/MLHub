@@ -3,7 +3,7 @@
 <c:forEach varStatus="loop" var="compra" items="${requestScope.masComprados}">
     <tr>
         <th scope="row">${loop.count}</th>
-        <td>${compra.nombre}</td>
-        <td>${compra.cantidad}</td>
+        <td id="maxCompNom${loop.count}"><c:out value="${compra.nombre}"/></td>
+        <td id="maxCompCant${loop.count}"><c:out value="${compra.cantidad}"/></td>
     </tr>
 </c:forEach>

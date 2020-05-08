@@ -21,7 +21,7 @@
                         <tr>
                             <th scope="col">Características</th>
                             <c:forEach var="subs" items="${subscripciones}">
-                                <th scope="col">${subs.nombre}</th>
+                                <th scope="col"><c:out value="${subs.nombre}"/></th>
                             </c:forEach>
                         </tr>
                     </thead>
@@ -90,13 +90,13 @@
                                     <button class="boton-precio" type="submit" name="subsId" value="${subs.id}">
                                         <c:choose>
                                             <c:when test="${subs.porcentajeOferta != 0}">
-                                                <span class="precioAnterior">${subs.precio} €/mes</span>
+                                                <span class="precioAnterior"><c:out value="${subs.precio}"/> €/mes</span>
                                                 <br>
                                                 <br>
-                                                <span class="precioOferta">${subs.precioReal} €/mes</span>
+                                                <span class="precioOferta"><c:out value="${subs.precioReal}"/> €/mes</span>
                                             </c:when>
                                             <c:otherwise>
-                                                ${subs.precio} €/mes
+                                                <c:out value="${subs.precio}"/> €/mes
                                             </c:otherwise>
                                         </c:choose>
                                     </button>
@@ -110,7 +110,7 @@
 
         <c:if test="${not empty requestScope.error}">
             <br>
-            <div id="error" class="center">${requestScope.error}</div>
+            <div id="error" class="center"><c:out value="${requestScope.error}"/></div>
         </c:if>
 
         <br>

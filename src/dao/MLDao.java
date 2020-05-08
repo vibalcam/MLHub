@@ -188,18 +188,6 @@ public class MLDao {
     }
 
     public List<Compra> getSubscripcionesMasCompradas(int number) throws SQLException {
-//        PreparedStatement statement = connection.prepareStatement("SELECT p.nombre, COUNT(c.id) AS sumCantidad " +
-//                "FROM compras AS c LEFT JOIN productos AS p ON p.id=c.producto GROUP BY p.nombre ORDER BY sumCantidad DESC LIMIT ?");
-//        statement.setInt(1,number);
-//
-//        ResultSet resultSet = statement.executeQuery();
-//        ArrayList<Compra> list = new ArrayList<>();
-//        while (resultSet.next())
-//            list.add(getProductoCompradoFromResultSet(resultSet));
-//
-//        resultSet.close();
-//        statement.close();
-//        return list;
         return getSubscripcionesMasCompradas(number,null,null);
     }
 
@@ -222,24 +210,12 @@ public class MLDao {
     }
 
     public List<Compra> getFechaMaxCompras(int number) throws SQLException {
-//        PreparedStatement statement = connection.prepareStatement("SELECT c.fecha,COUNT(c.id) AS sumCantidad " +
-//                "FROM compras AS c GROUP BY c.fecha ORDER BY sumCantidad DESC LIMIT ?");
-//        statement.setInt(1,number);
-//
-//        ResultSet resultSet = statement.executeQuery();
-//        ArrayList<Compra> list = new ArrayList<>();
-//        while (resultSet.next())
-//            list.add(getFechaCompraFromResultSet(resultSet));
-//
-//        resultSet.close();
-//        statement.close();
-//        return list;
         return getFechaMaxCompras(number,null,null);
     }
 
     public List<Compra> getFechaMaxCompras(int number, Calendar inicio, Calendar fin) throws SQLException {
         PreparedStatement statement = connection.prepareStatement("SELECT c.fecha,COUNT(c.id) AS sumCantidad " +
-                "FROM compras AS c WHERE c.fecha BETWEEN ? AND ? GROUP BY c.fecha ORDER BY sumCantidad DESC LIMIT ?");
+                "FROM compras AS c WHERE c.fecha BETWEEN ? AND ? GROUP BY c.fecha ORDER BY c.fecha ASC LIMIT ?");
         statement.setDate(1,inicio == null ? new Date(1) : new Date(inicio.getTimeInMillis()),CALENDAR);
         statement.setDate(2,fin == null ? new Date(Calendar.getInstance().getTimeInMillis()) : new Date(fin.getTimeInMillis()), CALENDAR);
         statement.setInt(3,number);

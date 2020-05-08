@@ -5,14 +5,19 @@ $(document).ready(function () {
     });
 
     // Insertamos los mínimos y máximos en los datepickers
-    $('.datepickerStart').focus(function() {
-        console.log($('.datepickerEnd').val());
-        $('.datepickerStart').attr("max",$('.datepickerEnd').val());
+    $('.datepickerStart.datepicker-product').focus(function() {
+        $('.datepickerStart.datepicker-product').attr("max",$('.datepickerEnd.datepicker-product').val());
     });
-    $('.datepickerEnd').focus(function() {
-        console.log($('.datepickerStart').val());
-        $('.datepickerEnd').attr("min",$('.datepickerStart').val());
+    $('.datepickerEnd.datepicker-product').focus(function() {
+        $('.datepickerEnd.datepicker-product').attr("min",$('.datepickerStart.datepicker-product').val());
     });
+    $('.datepickerStart.datepicker-fecha').focus(function() {
+        $('.datepickerStart.datepicker-fecha').attr("max",$('.datepickerEnd.datepicker-fecha').val());
+    });
+    $('.datepickerEnd.datepicker-fecha').focus(function() {
+        $('.datepickerEnd.datepicker-fecha').attr("min",$('.datepickerStart.datepicker-fecha').val());
+    });
+
 
     // AJAX estadísticas
 
@@ -27,6 +32,7 @@ $(document).ready(function () {
             fechaFin : fechaFin
         }, function (response) {
             $('#maxComprasProductos').html(response);
+            loadGraphProductos();
         })
     });
 
@@ -41,6 +47,7 @@ $(document).ready(function () {
             fechaFin : fechaFin
         }, function (response) {
             $('#maxComprasFechas').html(response);
+            loadGraphFechas();
         })
     });
 
@@ -179,7 +186,7 @@ $(document).ready(function () {
         }
     });
 
-    // Busar productos
+    // Buscar productos
     $('#searchProductos').click(function () {
         var action = "searchProductos";
         var filtro = $('#nombreBusquedaProductos').val().trim();
@@ -193,6 +200,102 @@ $(document).ready(function () {
         });
     });
 
+    // Grafica para productos mas comprados
+    function loadGraphProductos() {
+        // Cogemos los valores a representar en la gráfica
+        var labels = [];
+        var data = [];
+        var k = 1;
+        var nombre = $('#maxCompNom' + k);
+        var cantidad = $('#maxCompCant' + k);
+        while (nombre.length) {
+            labels.push(nombre.html());
+            data.push(cantidad.html());
+
+            k++;
+            nombre = $('#maxCompNom' + k);
+            cantidad = $('#maxCompCant' + k);
+        }
+
+        // Mostramos la gráfica
+        $('#graficoProductos').html("<canvas id=\"graficoProductos-canvas\"></canvas>");
+        new Chart(document.getElementById("graficoProductos-canvas"), {
+            "type": "horizontalBar",
+            "data": {
+                "label": "Volumen de compras por producto",
+                "labels": labels,
+                "datasets": [{
+                    "data": data,
+                    "fill": false,
+                    "backgroundColor": "rgba(54, 162, 235, 0.2)",
+                    "borderColor": "rgb(54, 162, 235)",
+                    "borderWidth": 1
+                }]
+            },
+            "options": {
+                "scales": {
+                    "xAxes": [{
+                        "ticks": {
+                            "beginAtZero": true
+                        }
+                    }]
+                },
+                "legend": {
+                    "display": false
+                }
+            }
+        });
+    }
+
+    // Grafica para fechas con mas compras
+    function loadGraphFechas() {
+        // Cogemos los valores a representar en la gráfica
+        var labels = [];
+        var data = [];
+        var k = 1;
+        var fecha = $('#maxFecha' + k);
+        var cantidad = $('#maxFechaCant' + k);
+        while (fecha.length) {
+            labels.push(fecha.html());
+            data.push(cantidad.html());
+
+            k++;
+            fecha = $('#maxFecha' + k);
+            cantidad = $('#maxFechaCant' + k);
+        }
+
+        // Mostramos la gráfica
+        $('#graficoFechas').html("<canvas id=\"graficoFechas-canvas\"></canvas>");
+        new Chart(document.getElementById("graficoFechas-canvas"), {
+            "type": "line",
+            "data": {
+                "label": "Volumen de compras por fecha",
+                "labels": labels,
+                "datasets": [{
+                    "data": data,
+                    "fill": false,
+                    "backgroundColor": "rgba(54, 162, 235, 0.2)",
+                    "borderColor": "rgb(54, 162, 235)",
+                    "borderWidth": 3
+                }]
+            },
+            "options": {
+                "scales": {
+                    "yAxes": [{
+                        "ticks": {
+                            "beginAtZero": true
+                        }
+                    }]
+                },
+                "legend": {
+                    "display": false
+                }
+            }
+        });
+    }
+
+    loadGraphProductos();
+    loadGraphFechas();
     loadProductosListeners();
     loadOfertasListeners();
 });
