@@ -37,4 +37,55 @@
         <servlet-name>Admin</servlet-name>
         <url-pattern>/inicio/admin/view</url-pattern>
     </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>Register</servlet-name>
+        <jsp-file>/register.jsp</jsp-file>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>Register</servlet-name>
+        <url-pattern>/register</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>Inicio</servlet-name>
+        <jsp-file>/inicio.jsp</jsp-file>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>Inicio</servlet-name>
+        <url-pattern>/inicio/usuario</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>Proyecto</servlet-name>
+        <jsp-file>/proyecto.jsp</jsp-file>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>Proyecto</servlet-name>
+        <url-pattern>/inicio/proyecto/view</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>Editar</servlet-name>
+        <jsp-file>/editar.jsp</jsp-file>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>Editar</servlet-name>
+        <url-pattern>/editar</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>Historial</servlet-name>
+        <jsp-file>/historial.jsp</jsp-file>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>Historial</servlet-name>
+        <url-pattern>/historial/view</url-pattern>
+    </servlet-mapping>
+
 </web-app>

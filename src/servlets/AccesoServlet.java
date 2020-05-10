@@ -72,6 +72,7 @@ public class AccesoServlet extends HttpServlet {
                 HttpSession session = request.getSession();
                 session.setAttribute(USER_LOGGED,usuario);
                 response.sendRedirect(getServletContext().getContextPath() + "/inicio");
+//                response.sendRedirect(getServletContext().getContextPath() + "/inicio/admin");
             } else {
                 request.setAttribute(KEY_ERROR,MSG_CREDENTIALS_ERROR);
                 request.getRequestDispatcher("/").forward(request,response);

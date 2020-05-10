@@ -27,6 +27,14 @@ public class Usuario {
         this(id,null,null,null);
     }
 
+    public Usuario(String nombre, String apellidos, Credentials credentials, AccessLevel accessLevel) {
+        this(0,nombre,apellidos,credentials, accessLevel);
+    }
+
+    public Usuario(Credentials credentials, AccessLevel accessLevel){
+        this(0, null, null, credentials, accessLevel);
+    }
+
     public int getId() {
         return id;
     }
