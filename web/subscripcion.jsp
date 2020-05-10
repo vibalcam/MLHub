@@ -46,7 +46,7 @@
                             </c:forEach>
                         </tr>
                         <tr>
-                            <th scope="row">Acceso a resultados</th>
+                            <th scope="row">Subir resultados</th>
                             <c:forEach var="subs" items="${subscripciones}">
                                 <td>
                                     <c:choose>
@@ -65,7 +65,7 @@
                             </c:forEach>
                         </tr>
                         <tr>
-                            <th scope="row">Subir resultados</th>
+                            <th scope="row">Acceso a Resultados Ajenos</th>
                             <c:forEach var="subs" items="${subscripciones}">
                                 <td>
                                     <c:choose>
