@@ -67,7 +67,14 @@
             <button class="btn btn-danger" type="submit" name="peticion" value="delete" onclick="return cancelar();">Eliminar Perfil</button>
         </div>
 
-        <p id = "error" class = "p-3 mb-2 text-danger"></p>
+        <c:choose>
+            <c:when test="${not empty requestScope.error}">
+                <div id="error" class="bg-danger text-light font-weight-bold p-1 px-4 m-2 rounded">${requestScope.error}</div>
+            </c:when>
+            <c:otherwise>
+                <div id="error" class="bg-danger text-light font-weight-bold p-1 px-4 m-2 rounded d-none">${requestScope.error}</div>
+            </c:otherwise>
+        </c:choose>
 
     </form>
 

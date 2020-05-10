@@ -16,6 +16,7 @@ public class EditarServlet extends HttpServlet {
     private static final String KEY_ERROR = "error";
     private static final String DUPLICITY_ERROR = "Este usuario ya se encuentra en nuestra base de datos";
     private static final String MSG_UNKNOWN_ERROR = "No se han podido validar sus credenciales: inténtelo más tarde";
+    private static final String BLANK_CREDENTIALS_ERROR = "No se han introducido usuario y/o password";
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -80,7 +81,8 @@ public class EditarServlet extends HttpServlet {
         String nombreUsuario = request.getParameter("usuario");
         String pwd = request.getParameter("pwd");
         if (nombreUsuario == null || pwd == null || nombreUsuario.isBlank() || pwd.isBlank()) {
-            vueltaInicio(request, response);
+            request.setAttribute(KEY_ERROR, BLANK_CREDENTIALS_ERROR);
+            request.getRequestDispatcher("/inicio/modificar/view").forward(request, response);
             return;
         }
 
@@ -99,8 +101,8 @@ public class EditarServlet extends HttpServlet {
             vueltaInicio(request, response);
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
-            request.setAttribute(KEY_ERROR, MSG_UNKNOWN_ERROR);
-            request.getRequestDispatcher("/").forward(request, response);
+            request.setAttribute(KEY_ERROR, DUPLICITY_ERROR);
+            request.getRequestDispatcher("/inicio/modificar/view").forward(request, response);
         } finally {
             if (dao != null) {
                 try {
