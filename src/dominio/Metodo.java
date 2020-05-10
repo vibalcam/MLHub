@@ -6,7 +6,7 @@ public class Metodo {
     private int tiempo;
 
 
-    public Metodo(String nombre, int eficacia, int tiempo){
+    public Metodo(String nombre, int eficacia, int tiempo) {
         setNombre(nombre);
         setEficacia(eficacia);
         setTiempo(tiempo);
@@ -20,19 +20,19 @@ public class Metodo {
         this.eficacia = eficacia;
     }
 
-    public void setTiempo(int tiempo){
+    public void setTiempo(int tiempo) {
         this.tiempo = tiempo;
     }
 
-    public String getNombre(){
+    public String getNombre() {
         return nombre;
     }
 
-    public int getEficacia(){
+    public int getEficacia() {
         return eficacia;
     }
 
-    public int getTiempo(){
+    public int getTiempo() {
         return tiempo;
     }
 }

@@ -1,7 +1,6 @@
 package servlets;
 
 import dao.MLDao;
-import dominio.AccessLevel;
 import dominio.Subscripcion;
 import dominio.Usuario;
 
@@ -25,12 +24,12 @@ public class SubscribeServlet extends HttpServlet {
         try {
             dao = MLDao.getInstance();
 
-            request.setAttribute("subscripciones",dao.getSubscripciones());
-            request.getRequestDispatcher("/inicio/subscripcion/view").forward(request,response);
+            request.setAttribute("subscripciones", dao.getSubscripciones());
+            request.getRequestDispatcher("/inicio/subscripcion/view").forward(request, response);
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         } finally {
-            if(dao != null) {
+            if (dao != null) {
                 try {
                     dao.close();
                 } catch (SQLException e) {
@@ -42,9 +41,9 @@ public class SubscribeServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String subsParameter = request.getParameter("subsId");
-        if(subsParameter == null) {
-            request.setAttribute(KEY_ERROR,MSG_ILLEGAL_ACCESS);
-            request.getRequestDispatcher("/inicio/subscripcion/view").forward(request,response);
+        if (subsParameter == null) {
+            request.setAttribute(KEY_ERROR, MSG_ILLEGAL_ACCESS);
+            request.getRequestDispatcher("/inicio/subscripcion/view").forward(request, response);
             return;
         }
 
@@ -54,20 +53,20 @@ public class SubscribeServlet extends HttpServlet {
             dao = MLDao.getInstance();
             HttpSession session = request.getSession();
             Usuario usuario = (Usuario) session.getAttribute(AccesoServlet.USER_LOGGED);
-            if(dao.subscribeUser(usuario, new Subscripcion(subsId))) {
-                session.setAttribute(AccesoServlet.USER_LOGGED,dao.getUserInfoById(usuario.getId()));
+            if (dao.subscribeUser(usuario, new Subscripcion(subsId))) {
+                session.setAttribute(AccesoServlet.USER_LOGGED, dao.getUserInfoById(usuario.getId()));
                 response.sendRedirect(getServletContext().getContextPath() + "/inicio");
             } else {
-                request.setAttribute(KEY_ERROR,"Ya tiene dicha subscripción activa");
-                request.setAttribute("subscripciones",dao.getSubscripciones());
-                request.getRequestDispatcher("/inicio/subscripcion/view").forward(request,response);
+                request.setAttribute(KEY_ERROR, "Ya tiene dicha subscripción activa");
+                request.setAttribute("subscripciones", dao.getSubscripciones());
+                request.getRequestDispatcher("/inicio/subscripcion/view").forward(request, response);
             }
-        } catch (NumberFormatException|SQLException | ClassNotFoundException e) {
+        } catch (NumberFormatException | SQLException | ClassNotFoundException e) {
             e.printStackTrace();
-            request.setAttribute(KEY_ERROR,MSG_ILLEGAL_ACCESS);
-            request.getRequestDispatcher("/inicio/subscripcion/view").forward(request,response);
+            request.setAttribute(KEY_ERROR, MSG_ILLEGAL_ACCESS);
+            request.getRequestDispatcher("/inicio/subscripcion/view").forward(request, response);
         } finally {
-            if(dao != null) {
+            if (dao != null) {
                 try {
                     dao.close();
                 } catch (SQLException e) {

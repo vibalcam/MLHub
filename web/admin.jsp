@@ -87,8 +87,14 @@
                                 <li class="nav-item">
                                     <a class="nav-link" href="${pageContext.request.contextPath}/inicio">Inicio</a>
                                 </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="${pageContext.request.contextPath}/inicio/subscripcion">Subscripción</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="${pageContext.request.contextPath}/inicio/historial">Historial</a>
+                                </li>
                                 <li class="nav-item active">
-                                    <a class="nav-link" href="${pageContext.request.contextPath}/inicio/admin">Cuenta</a>
+                                    <a class="nav-link" href="${pageContext.request.contextPath}/inicio/modificar">Usuario</a>
                                 </li>
                                 <li class="nav-item">
                                     <form id="formCerrarSesion" name="formCerrarSesion" method="post" action="${pageContext.request.contextPath}/inicio">

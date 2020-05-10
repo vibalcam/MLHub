@@ -22,20 +22,20 @@ public class AccessLevel implements Comparable<AccessLevel> {
         this.subirResultados = subirResultados;
     }
 
-    public static AccessLevel getInstance(int subscription){
-        if(subscription==3){
+    public static AccessLevel getInstance(int subscription) {
+        if (subscription == 3) {
             return new AccessLevel(PRIME_LEVEL);
-        } else if(subscription == 2){
+        } else if (subscription == 2) {
             return new AccessLevel(PRO_LEVEL);
         } else {
             return new AccessLevel(REGISTERED_LEVEL);
         }
     }
 
-    public int getSubscription(){
-        if(id==50){
+    public int getSubscription() {
+        if (id == 50) {
             return 3;
-        } else if(id == 70){
+        } else if (id == 70) {
             return 2;
         } else {
             return 1;
@@ -43,7 +43,7 @@ public class AccessLevel implements Comparable<AccessLevel> {
     }
 
     public void setId(int id) {
-        if(id < ADMIN_LEVEL || id > REGISTERED_LEVEL)
+        if (id < ADMIN_LEVEL || id > REGISTERED_LEVEL)
             throw new IllegalArgumentException("Nivel de acceso no valido");
         this.id = id;
     }
@@ -78,7 +78,7 @@ public class AccessLevel implements Comparable<AccessLevel> {
 
     @Override
     public boolean equals(Object obj) {
-        if(obj instanceof AccessLevel)
+        if (obj instanceof AccessLevel)
             return id == ((AccessLevel) obj).id;
         else
             return false;

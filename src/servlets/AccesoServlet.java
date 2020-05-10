@@ -19,19 +19,19 @@ public class AccesoServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        accesoIlegal(request,response);
+        accesoIlegal(request, response);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String peticion = request.getParameter("peticion");
-        if(peticion == null) {
+        if (peticion == null) {
             response.sendRedirect(getServletContext().getContextPath());
             return;
         }
 
         switch (peticion) {
             case "acc":
-                acceder(request,response);
+                acceder(request, response);
                 return;
             case "reg":
                 response.sendRedirect(getServletContext().getContextPath() + "/register");
@@ -42,25 +42,25 @@ public class AccesoServlet extends HttpServlet {
     }
 
     private void accesoIlegal(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setAttribute(KEY_ERROR,MSG_ILLEGAL_ACCESS);
-        request.getRequestDispatcher("/").forward(request,response);
+        request.setAttribute(KEY_ERROR, MSG_ILLEGAL_ACCESS);
+        request.getRequestDispatcher("/").forward(request, response);
     }
 
     private void acceder(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String nombreUsuario = request.getParameter("usuario");
         String pwd = request.getParameter("pwd");
-        if(nombreUsuario == null || pwd == null || nombreUsuario.isBlank() || pwd.isBlank()) {
-            accesoIlegal(request,response);
+        if (nombreUsuario == null || pwd == null || nombreUsuario.isBlank() || pwd.isBlank()) {
+            accesoIlegal(request, response);
             return;
         }
 
         MLDao dao = null;
         try {
             dao = MLDao.getInstance();
-            Usuario usuario = dao.checkAndGetUserInfo(new Usuario.Credentials(nombreUsuario,pwd));
-            if(usuario != null) {
-                Cookie cookie = new Cookie("remember",nombreUsuario);
-                if(Boolean.parseBoolean(request.getParameter("remember")))
+            Usuario usuario = dao.checkAndGetUserInfo(new Usuario.Credentials(nombreUsuario, pwd));
+            if (usuario != null) {
+                Cookie cookie = new Cookie("remember", nombreUsuario);
+                if (Boolean.parseBoolean(request.getParameter("remember")))
                     cookie.setMaxAge(Integer.MAX_VALUE);
                 else
                     cookie.setMaxAge(0);
@@ -70,19 +70,18 @@ public class AccesoServlet extends HttpServlet {
                 // Guardamos el usuario en la sesion para su posterior uso y no tener que volver a introducir las
                 // credenciales
                 HttpSession session = request.getSession();
-                session.setAttribute(USER_LOGGED,usuario);
+                session.setAttribute(USER_LOGGED, usuario);
                 response.sendRedirect(getServletContext().getContextPath() + "/inicio");
-//                response.sendRedirect(getServletContext().getContextPath() + "/inicio/admin");
             } else {
-                request.setAttribute(KEY_ERROR,MSG_CREDENTIALS_ERROR);
-                request.getRequestDispatcher("/").forward(request,response);
+                request.setAttribute(KEY_ERROR, MSG_CREDENTIALS_ERROR);
+                request.getRequestDispatcher("/").forward(request, response);
             }
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
-            request.setAttribute(KEY_ERROR,MSG_UNKNOWN_ERROR);
-            request.getRequestDispatcher("/").forward(request,response);
+            request.setAttribute(KEY_ERROR, MSG_UNKNOWN_ERROR);
+            request.getRequestDispatcher("/").forward(request, response);
         } finally {
-            if(dao != null) {
+            if (dao != null) {
                 try {
                     dao.close();
                 } catch (SQLException e) {

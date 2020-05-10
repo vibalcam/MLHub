@@ -1,12 +1,13 @@
 package servlets;
 
 import dao.MLDao;
-import dominio.AccessLevel;
 import dominio.Usuario;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.*;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
 
@@ -18,19 +19,19 @@ public class RegistroServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        vueltaInicio(request,response);
+        vueltaInicio(request, response);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String peticion = request.getParameter("peticion");
-        if(peticion == null) {
+        if (peticion == null) {
             response.sendRedirect(getServletContext().getContextPath());
             return;
         }
 
         switch (peticion) {
             case "reg":
-                crearUsuario(request,response);
+                crearUsuario(request, response);
                 return;
             case "can":
                 vueltaInicio(request, response);
@@ -40,15 +41,15 @@ public class RegistroServlet extends HttpServlet {
         }
     }
 
-    private void vueltaInicio(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void vueltaInicio(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.sendRedirect(getServletContext().getContextPath());
     }
 
     private void crearUsuario(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String nombreUsuario = request.getParameter("usuario");
         String pwd = request.getParameter("pwd");
-        if(nombreUsuario == null || pwd == null || nombreUsuario.isBlank() || pwd.isBlank()) {
-            vueltaInicio(request,response);
+        if (nombreUsuario == null || pwd == null || nombreUsuario.isBlank() || pwd.isBlank()) {
+            vueltaInicio(request, response);
             return;
         }
 
@@ -56,9 +57,9 @@ public class RegistroServlet extends HttpServlet {
         try {
             dao = MLDao.getInstance();
 
-            if(dao.existsUser(nombreUsuario)){
-                request.setAttribute(KEY_ERROR,DUPLICITY_ERROR);
-                request.getRequestDispatcher("/").forward(request,response);
+            if (dao.existsUser(nombreUsuario)) {
+                request.setAttribute(KEY_ERROR, DUPLICITY_ERROR);
+                request.getRequestDispatcher("/").forward(request, response);
                 return;
             }
 
@@ -72,10 +73,10 @@ public class RegistroServlet extends HttpServlet {
             vueltaInicio(request, response);
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
-            request.setAttribute(KEY_ERROR,MSG_UNKNOWN_ERROR);
-            request.getRequestDispatcher("/").forward(request,response);
+            request.setAttribute(KEY_ERROR, MSG_UNKNOWN_ERROR);
+            request.getRequestDispatcher("/").forward(request, response);
         } finally {
-            if(dao != null) {
+            if (dao != null) {
                 try {
                     dao.close();
                 } catch (SQLException e) {

@@ -23,8 +23,9 @@ public class Compra {
 
     /**
      * Usado para guardar datos colectivos (suma diaria de compras...)
-     * @param fecha fecha colectiva de la compra, si es que existe
-     * @param nombre nombre del producto comprado, si es que existe
+     *
+     * @param fecha    fecha colectiva de la compra, si es que existe
+     * @param nombre   nombre del producto comprado, si es que existe
      * @param cantidad cantidad comprada
      */
     public Compra(Calendar fecha, String nombre, int cantidad) {
@@ -45,11 +46,6 @@ public class Compra {
 
     public Calendar getFecha() {
         return fecha;
-    }
-
-    public String getFechaString(){
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-dd-mm ");
-        return dateFormat.format(fecha.getTime());
     }
 
     public void setFecha(Calendar fecha) {

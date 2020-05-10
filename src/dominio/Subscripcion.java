@@ -9,7 +9,7 @@ public class Subscripcion implements Comparable<Subscripcion> {
     private int porcentajeOferta;
     private AccessLevel accessLevel;
 
-    public Subscripcion(int id, String nombre, double precio,int porcentajeOferta, AccessLevel accessLevel) {
+    public Subscripcion(int id, String nombre, double precio, int porcentajeOferta, AccessLevel accessLevel) {
         this.id = id;
         this.nombre = nombre;
         setPrecio(precio);
@@ -48,13 +48,13 @@ public class Subscripcion implements Comparable<Subscripcion> {
     }
 
     public void setPorcentajeOferta(int porcentajeOferta) {
-        if(porcentajeOferta < 0 || porcentajeOferta > 100)
+        if (porcentajeOferta < 0 || porcentajeOferta > 100)
             throw new IllegalArgumentException("Oferta debe de estar entre 0 y 100");
         this.porcentajeOferta = porcentajeOferta;
     }
 
     public double getPrecioReal() {
-        return precio * (1 - porcentajeOferta/100.0);
+        return precio * (1 - porcentajeOferta / 100.0);
     }
 
     public int getId() {
@@ -74,7 +74,7 @@ public class Subscripcion implements Comparable<Subscripcion> {
     }
 
     public double getPrecio() {
-        if(precio < 0)
+        if (precio < 0)
             throw new IllegalArgumentException("Precio no puede ser negativo");
         return precio;
     }
@@ -94,14 +94,14 @@ public class Subscripcion implements Comparable<Subscripcion> {
     @Override
     public int compareTo(Subscripcion subscripcion) {
         int result = (-1) * getAccessLevel().compareTo(subscripcion.getAccessLevel());
-        if(result == 0)
+        if (result == 0)
             result = getNombre().compareTo(subscripcion.getNombre());
         return result;
     }
 
     @Override
     public boolean equals(Object obj) {
-        if(obj instanceof Subscripcion)
+        if (obj instanceof Subscripcion)
             return getId() == ((Subscripcion) obj).getId();
         else
             return false;

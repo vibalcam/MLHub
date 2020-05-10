@@ -24,12 +24,7 @@
             <div id="content">
                 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
                     <div class="container-fluid">
-                        <button type="button" id="sidebarCollapse" class="btn btn-secondary">
-                            <i class="fas fa-align-left"></i>
-                            <span>Toggle Sidebar</span>
-                        </button>
-
-                        <form class="row form-inline ml-4 d-none d-lg-inline" id="formBuscar" name="formBuscar" method="get" action="${pageContext.request.contextPath}/inicio/view">
+                        <form class="row form-inline ml-4 d-none d-lg-inline" id="formBuscar" name="formBuscar" method="get" action="${pageContext.request.contextPath}/inicio">
                             <input class="form-control mr-sm-2 col-7" type="search" id = "searchName" name="searchName" required placeholder="Buscar" aria-label="Buscar">
                             <button class="btn btn-success" type="submit" id ="action" name="action" value="searchEntry">Buscar</button>
                         </form>
@@ -41,17 +36,17 @@
     
                         <div class="collapse navbar-collapse" id="navbarSupportedContent">
                             <ul class="nav navbar-nav ml-auto">
-                                <li class="nav-item">
+                                <li class="nav-item active">
                                     <a class="nav-link" href="${pageContext.request.contextPath}/inicio">Inicio</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="${pageContext.request.contextPath}/inicio/subscripcion">Subscripción</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="${pageContext.request.contextPath}/historial">Historial</a>
+                                    <a class="nav-link" href="${pageContext.request.contextPath}/inicio/historial">Historial</a>
                                 </li>
-                                <li class="nav-item active">
-                                    <a class="nav-link" href="${pageContext.request.contextPath}/editar">Usuario</a>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="${pageContext.request.contextPath}/inicio/modificar">Usuario</a>
                                 </li>
                                 <li class="nav-item">
                                     <form id="formCerrarSesion" name="formCerrarSesion" method="post" action="${pageContext.request.contextPath}/inicio">
@@ -87,10 +82,10 @@
                 </br></br>
 
                 <div class="card">
-                    <h5 class="card-header">Añadir Nuevo Método</h5>
+                    <h5 class="card-header">Añadir Nuevo Proyecto</h5>
                     <div class="card-body">
 
-                        <form action="${pageContext.request.contextPath}/inicio/view" method="post" name="inicio"
+                        <form action="${pageContext.request.contextPath}/inicio" method="post" name="inicio"
                               id="inicioForm2" onsubmit="return comprobacion();">
 
                             <ul class="list-group list-group-flush">

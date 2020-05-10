@@ -20,18 +20,18 @@ public class Usuario {
     }
 
     public Usuario(int id, String nombre, String apellidos, Credentials credentials) {
-        this(id,nombre, apellidos,credentials,new AccessLevel(AccessLevel.REGISTERED_LEVEL));
+        this(id, nombre, apellidos, credentials, new AccessLevel(AccessLevel.REGISTERED_LEVEL));
     }
 
     public Usuario(int id) {
-        this(id,null,null,null);
+        this(id, null, null, null);
     }
 
     public Usuario(String nombre, String apellidos, Credentials credentials, AccessLevel accessLevel) {
-        this(0,nombre,apellidos,credentials, accessLevel);
+        this(0, nombre, apellidos, credentials, accessLevel);
     }
 
-    public Usuario(Credentials credentials, AccessLevel accessLevel){
+    public Usuario(Credentials credentials, AccessLevel accessLevel) {
         this(0, null, null, credentials, accessLevel);
     }
 
@@ -94,13 +94,13 @@ public class Usuario {
         }
 
         public void setNombreUsuario(String nombreUsuario) {
-            if(nombreUsuario == null)
+            if (nombreUsuario == null)
                 throw new IllegalArgumentException("Usuario no puede ser nulo");
 
             nombreUsuario = nombreUsuario.strip();
-            if(nombreUsuario.length() > MAX_LENGTH)
+            if (nombreUsuario.length() > MAX_LENGTH)
                 throw new IllegalArgumentException("Longitud de nombre de usuario no puede exceder " + MAX_LENGTH);
-            else if(PATTERN_NOT_ALLOWED.matcher(nombreUsuario).find())
+            else if (PATTERN_NOT_ALLOWED.matcher(nombreUsuario).find())
                 throw new IllegalArgumentException("Usuario contiene caracteres invalidos");
 
             this.nombreUsuario = nombreUsuario;
@@ -111,11 +111,11 @@ public class Usuario {
         }
 
         public void setPassword(String password) {
-            if(password == null)
+            if (password == null)
                 throw new IllegalArgumentException("Password no puede ser nulo");
-            else if(password.length() > MAX_LENGTH)
+            else if (password.length() > MAX_LENGTH)
                 throw new IllegalArgumentException("Longitud de Password no puede exceder " + MAX_LENGTH);
-            else if(PATTERN_NOT_ALLOWED.matcher(password).find())
+            else if (PATTERN_NOT_ALLOWED.matcher(password).find())
                 throw new IllegalArgumentException("Password contiene caracteres invalidos");
 
             this.password = password;

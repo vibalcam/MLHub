@@ -75,7 +75,7 @@
 
     <servlet-mapping>
         <servlet-name>Editar</servlet-name>
-        <url-pattern>/editar</url-pattern>
+        <url-pattern>/inicio/modificar/view</url-pattern>
     </servlet-mapping>
 
     <servlet>
@@ -85,7 +85,7 @@
 
     <servlet-mapping>
         <servlet-name>Historial</servlet-name>
-        <url-pattern>/historial/view</url-pattern>
+        <url-pattern>/inicio/historial/view</url-pattern>
     </servlet-mapping>
 
 </web-app>

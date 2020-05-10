@@ -27,7 +27,7 @@ public class ProductoComprado implements Comparable<ProductoComprado> {
 
     @Override
     public int compareTo(ProductoComprado productoComprado) {
-        int resultado = Integer.compare(cantidad,productoComprado.cantidad);
+        int resultado = Integer.compare(cantidad, productoComprado.cantidad);
         return resultado == 0 ? nombre.compareTo(productoComprado.nombre) : resultado;
     }
 }

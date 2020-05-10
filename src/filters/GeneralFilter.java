@@ -18,7 +18,7 @@ public class GeneralFilter implements Filter {
         if (obj == null) {
             ((HttpServletResponse) response).sendRedirect(((HttpServletRequest) request).getContextPath());
         } else
-            chain.doFilter(request,response);
+            chain.doFilter(request, response);
     }
 
     public void init(FilterConfig config) throws ServletException {

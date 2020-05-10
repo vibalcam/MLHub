@@ -4,6 +4,14 @@ body {
     background: #fafafa;
 }
 
+.line-separator {
+    margin-top:5px;
+    margin-bottom:5px;
+    height:1px;
+    width:100%;
+    border-top:1px solid gray;
+}
+
 p {
     font-family: 'Poppins', sans-serif;
     font-size: 1.1em;

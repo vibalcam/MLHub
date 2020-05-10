@@ -64,8 +64,8 @@
                 </c:choose>
 
                 <div class="form-group col-sm-auto">
-                    <button class="btn btn-secondary" type="submit" name="peticion" value="reg">Registrarse</button>
                     <button class="btn btn-primary" type="submit" name="peticion" id="buttonAcc" value="acc">Acceder</button>
+                    <button class="btn btn-secondary" type="submit" name="peticion" value="reg">Registrarse</button>
                 </div>
             </form>
         </div>

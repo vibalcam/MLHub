@@ -20,18 +20,11 @@
 
 <body>
 <div class="wrapper">
-    <!-- Sidebar  -->
-
     <!-- Navigation  -->
     <div id="content">
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="container-fluid">
-                <button type="button" id="sidebarCollapse" class="btn btn-secondary">
-                    <i class="fas fa-align-left"></i>
-                    <span>Toggle Sidebar</span>
-                </button>
-
-                <form class="row form-inline ml-4 d-none d-lg-inline" id="formBuscar" name="formBuscar" method="get" action="${pageContext.request.contextPath}/inicio/view">
+                <form class="row form-inline ml-4 d-none d-lg-inline" id="formBuscar" name="formBuscar" method="get" action="${pageContext.request.contextPath}/inicio">
                     <input class="form-control mr-sm-2 col-7" type="search" name="searchName" required placeholder="Buscar" aria-label="Buscar">
                     <button class="btn btn-success" type="submit" name="action" value="searchEntry">Buscar</button>
                 </form>
@@ -49,11 +42,11 @@
                         <li class="nav-item">
                             <a class="nav-link" href="${pageContext.request.contextPath}/inicio/subscripcion">Subscripción</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="${pageContext.request.contextPath}/historial">Historial</a>
-                        </li>
                         <li class="nav-item active">
-                            <a class="nav-link" href="${pageContext.request.contextPath}/editar">Usuario</a>
+                            <a class="nav-link" href="${pageContext.request.contextPath}/inicio/historial">Historial</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="${pageContext.request.contextPath}/inicio/modificar">Usuario</a>
                         </li>
                         <li class="nav-item">
                             <form id="formCerrarSesion" name="formCerrarSesion" method="post" action="${pageContext.request.contextPath}/inicio">

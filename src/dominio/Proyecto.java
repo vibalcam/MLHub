@@ -7,11 +7,26 @@ public class Proyecto {
     private String nombre;
     private ArrayList<Metodo> metodos;
     private String codigo;
+    private int idUsuario;
 
-    public Proyecto(String nombre, String codigo){
+    public Proyecto(int id, String nombre, String codigo, int idUsuario, ArrayList<Metodo> metodos) {
+        this.id = id;
+        this.nombre = nombre;
+        this.codigo = codigo;
+        this.idUsuario = idUsuario;
+        this.metodos = metodos;
+    }
+
+    public Proyecto(String nombre, String codigo) {
         setNombre(nombre);
         metodos = new ArrayList<>();
         this.codigo = codigo;
+    }
+
+    public Proyecto(int id, String nombre) {
+        this.id = id;
+        this.nombre = nombre;
+        this.metodos = new ArrayList<>();
     }
 
     public Proyecto(String nombre) {
@@ -26,11 +41,8 @@ public class Proyecto {
         this.nombre = nombre;
     }
 
-    public void addMetodo(Metodo metodo){
-        metodos.add(metodo);
-    }
 
-    public int getId(){
+    public int getId() {
         return id;
     }
 
@@ -38,11 +50,27 @@ public class Proyecto {
         return codigo;
     }
 
-    public String getNombre(){
+    public String getNombre() {
         return nombre;
     }
 
-    public ArrayList<Metodo> getMetodos(){
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public ArrayList<Metodo> getMetodos() {
         return metodos;
+    }
+
+    public void setMetodos(ArrayList<Metodo> metodos) {
+        this.metodos = metodos;
+    }
+
+    public int getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
     }
 }

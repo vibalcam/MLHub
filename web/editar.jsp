@@ -22,7 +22,7 @@
                 El lugar para los developers de Machine Learning
             </p>
         </div>
-        <img class="offset-xl-1 col-xl-4 col-sm-6 img-fluid rounded" src="images/logo.jpg" alt="Logo">
+        <img class="offset-xl-1 col-xl-4 col-sm-6 img-fluid rounded" src="${pageContext.request.contextPath}/images/logo.jpg" alt="Logo">
     </div>
 </div>
 
@@ -33,18 +33,18 @@
 
     <hr>
 
-    <form class="card-body" action="${pageContext.request.contextPath}/modificar" method="post" name="inicio"
+    <form class="card-body" action="${pageContext.request.contextPath}/inicio/modificar" method="post" name="inicio"
           id="inicioForm" onsubmit="return comprobacion2();">
         <div class="form-group col-sm-auto">
             <label for="name">Nombre: </label>
             <input class="form-control input-credentials" minlength="1" maxlength="${initParam.maxLength}"
-                   type="text" name="name" id="name" placeholder="Nombre">
+                   type="text" name="name" id="name" placeholder="Nombre" value="${sessionScope.userLogged.nombre}">
         </div>
 
         <div class="form-group col-sm-auto">
             <label for="lastname">Apellidos: </label>
             <input class="form-control input-credentials" minlength="1" maxlength="${initParam.maxLength}"
-                   type="text" name="lastname" id="lastname" placeholder="Apellidos">
+                   type="text" name="lastname" id="lastname" placeholder="Apellidos" value="${sessionScope.userLogged.apellidos}">
         </div>
 
         <div class="form-group col-sm-auto">

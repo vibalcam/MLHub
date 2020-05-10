@@ -30,7 +30,7 @@
                     <span>Toggle Sidebar</span>
                 </button>
 
-                <form class="row form-inline ml-4 d-none d-lg-inline" id="formBuscar" name="formBuscar" method="get" action="${pageContext.request.contextPath}/inicio/view">
+                <form class="row form-inline ml-4 d-none d-lg-inline" id="formBuscar" name="formBuscar" method="get" action="${pageContext.request.contextPath}/inicio">
                     <input class="form-control mr-sm-2 col-7" type="search" name="searchName" required placeholder="Buscar" aria-label="Buscar">
                     <button class="btn btn-success" type="submit" name="action" value="searchEntry">Buscar</button>
                 </form>
@@ -42,17 +42,17 @@
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="nav navbar-nav ml-auto">
-                        <li class="nav-item">
+                        <li class="nav-item active">
                             <a class="nav-link" href="${pageContext.request.contextPath}/inicio">Inicio</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="${pageContext.request.contextPath}/inicio/subscripcion">Subscripción</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="${pageContext.request.contextPath}/historial">Historial</a>
+                            <a class="nav-link" href="${pageContext.request.contextPath}/inicio/historial">Historial</a>
                         </li>
-                        <li class="nav-item active">
-                            <a class="nav-link" href="${pageContext.request.contextPath}/editar">Usuario</a>
+                        <li class="nav-item">
+                            <a class="nav-link" href="${pageContext.request.contextPath}/inicio/modificar">Usuario</a>
                         </li>
                         <li class="nav-item">
                             <form id="formCerrarSesion" name="formCerrarSesion" method="post" action="${pageContext.request.contextPath}/inicio">
@@ -67,35 +67,33 @@
 
         <!-- Page Content  -->
         <c:choose>
-            <c:when test="${addPosible == 1}">
+<%--            <c:when test="${addPosible == 1}">--%>
+            <c:when test="${not empty sessionScope.userLogged && requestScope.proyecto.idUsuario == sessionScope.userLogged.id}">
                 <div class="card text-center">
                     <div class="card-header">
-                        <h4><c:out value="${nombreProyecto}: Código"/></h4>
+                        <h4><c:out value="${requestScope.proyecto.nombre}: Código"/></h4>
                     </div>
                     <div class="card-body">
                         <form action="${pageContext.request.contextPath}/inicio/proyecto" method="post" name="inicio"
                               id="inicioForm3">
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item">
-                                    <textarea class="form-control" id="codigo" name="codigo" placeholder="Escriba aquí su código..."></textarea>
-                                </li>
+                            <div>
+                                <div class="list-group-item">
+                                    <textarea style="height: 10vw;" class="form-control" id="codigo" name="codigo" placeholder="Escriba aquí su código..."><c:out value="${requestScope.proyecto.codigo}"/></textarea>
+                                </div>
                                 <br>
-                                <li class="list-group.item">
-                                    <c:out value="${codigo}"/>
-                                </li>
-                            </ul>
+                            </div>
                             <div class="card-body">
-                                <button class="btn btn-primary" type="submit" name="peticion2" value="${nombreProyecto}">Modificar</button>
+                                <button class="btn btn-primary" type="submit" name="peticion2" value="${requestScope.proyecto.nombre}">Modificar</button>
                             </div>
                         </form>
                     </div>
                 </div>
                 <br>
 
-                <c:if test="${level >= 2}">
+                <c:if test="${not empty sessionScope.userLogged && sessionScope.userLogged.accessLevel.subirResultados}">
                     <div class="card text-center">
                         <div class="card-header">
-                            <h4><c:out value="${nombreProyecto}: Métodos"/></h4>
+                            <h4><c:out value="${requestScope.proyecto.nombre}: Métodos"/></h4>
                         </div>
                         <div class="card-body">
                             <table class="table">
@@ -108,7 +106,7 @@
                                 </thead>
                                 <tbody>
 
-                                <c:forEach items = "${metodos}" var = "metodo">
+                                <c:forEach items = "${requestScope.proyecto.metodos}" var = "metodo">
                                     <tr>
                                         <td><c:out value="${metodo.nombre}"/></td>
                                         <td><c:out value="${metodo.eficacia}%"/></td>
@@ -155,7 +153,7 @@
 
                                 </ul>
                                 <div class="card-body">
-                                    <button class="btn btn-primary" type="submit" name="peticion" value="${nombreProyecto}">Añadir</button>
+                                    <button class="btn btn-primary" type="submit" name="peticion" value="${requestScope.proyecto.nombre}">Añadir</button>
                                 </div>
 
                                 <p id = "error" class = "p-3 mb-2 text-danger"></p>
@@ -167,42 +165,42 @@
                 </c:if>
             </c:when>
             <c:otherwise>
-                <c:if test="${level == 3}">
-                    <div class="card text-center">
-                        <div class="card-header">
-                            <h4><c:out value="${nombreProyecto}"/></h4>
-                        </div>
-                        <div class="card-body">
-                            <table class="table">
-                                <thead class="thead-dark">
-                                <tr>
-                                    <th scope="col">Nombre</th>
-                                    <th scope="col">Eficacia</th>
-                                    <th scope="col">Tiempo</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-
-                                <c:forEach items = "${metodos}" var = "metodo">
+                <c:choose>
+                    <c:when test="${not empty sessionScope.userLogged && sessionScope.userLogged.accessLevel.accesoResultados}">
+                        <div class="card text-center">
+                            <div class="card-header">
+                                <h4><c:out value="${requestScope.proyecto.nombre}"/></h4>
+                            </div>
+                            <div class="card-body">
+                                <table class="table">
+                                    <thead class="thead-dark">
                                     <tr>
-                                        <td><c:out value="${metodo.nombre}"/></td>
-                                        <td><c:out value="${metodo.eficacia}%"/></td>
-                                        <td><c:out value="${metodo.tiempo}"/></td>
+                                        <th scope="col">Nombre</th>
+                                        <th scope="col">Eficacia</th>
+                                        <th scope="col">Tiempo</th>
                                     </tr>
-                                </c:forEach>
+                                    </thead>
+                                    <tbody>
 
-                                </tbody>
-                            </table>
+                                    <c:forEach items = "${requestScope.proyecto.metodos}" var = "metodo">
+                                        <tr>
+                                            <td><c:out value="${metodo.nombre}"/></td>
+                                            <td><c:out value="${metodo.eficacia}%"/></td>
+                                            <td><c:out value="${metodo.tiempo}"/></td>
+                                        </tr>
+                                    </c:forEach>
+
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                    </div>
-                </c:if>
+                    </c:when>
+                    <c:otherwise>
+                        <h3>Su subscripción no tiene permisos suficientes para ver los detalles de este proyecto</h3>
+                    </c:otherwise>
+                </c:choose>
             </c:otherwise>
         </c:choose>
-
-        <c:if test="${level == 1}">
-            <h3>Su subscripción no tiene permisos suficientes para ver los detalles de este proyecto</h3>
-        </c:if>
-
     </div>
 
         <!-- Icons -->
