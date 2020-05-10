@@ -13,9 +13,9 @@ import java.sql.SQLException;
 @WebServlet(name = "MainServlet", urlPatterns = "/inicio")
 public class MainServlet extends HttpServlet {
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doGet(req, resp);
-        //todo mostrar pagina normal
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        request.getRequestDispatcher("/inicio/view").forward(request,response);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

@@ -1,5 +1,6 @@
 package dao;
 
+import com.sun.source.tree.MemberReferenceTree;
 import dominio.*;
 
 import java.sql.*;
@@ -40,12 +41,39 @@ public class MLDao {
         statement.setString(2,usuario.getApellidos());
         statement.setString(3,usuario.getCredentials().getNombreUsuario());
         statement.setString(4,usuario.getCredentials().getPassword());
-        statement.setInt(5,usuario.getAccessLevel().getId());
+        statement.setInt(5,1);
 
         int result = statement.executeUpdate();
         statement.close();
-        if(result == 0)
+        if(result == 0){
             throw new SQLException("No se ha podido insertar debido a un fallo inesperado");
+        }
+
+    }
+
+    public void deleteUser(int id) throws SQLException {
+        PreparedStatement stat = connection.prepareStatement(
+                "DELETE FROM users WHERE ID=?"
+        );
+
+        stat.setInt(1,id);
+        stat.execute();
+        stat.close();
+    }
+
+    public void editUser(Usuario usuario) throws SQLException {
+        PreparedStatement stat = connection.prepareStatement(
+                "UPDATE users SET nombre = ?, apellidos = ?, usuario = ?, password = ? WHERE id = ?"
+        );
+
+        stat.setString(1,usuario.getNombre());
+        stat.setString(2,usuario.getApellidos());
+        stat.setString(3,usuario.getCredentials().getNombreUsuario());
+        stat.setString(4,usuario.getCredentials().getPassword());
+        stat.setInt(5,usuario.getId());
+
+        stat.execute();
+        stat.close();
     }
 
     public boolean checkUser(Usuario.Credentials credentials) throws SQLException {
@@ -53,6 +81,26 @@ public class MLDao {
                 "SELECT COUNT(usuario) AS 'count' FROM users WHERE usuario=? AND password=? GROUP BY usuario");
         statement.setString(1,credentials.getNombreUsuario());
         statement.setString(2,credentials.getPassword());
+
+        ResultSet resultSet = statement.executeQuery();
+        if(resultSet.first()) {
+            resultSet.first();
+            int resultado = resultSet.getInt("count");
+            resultSet.close();
+            statement.close();
+
+            if (resultado > 1) //should never happen
+                throw new SQLException("Resultado inesperado: más de una coincidencia");
+            else
+                return resultado == 1;
+        } else
+            return false;
+    }
+
+    public boolean existsUser(String username) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement(
+                "SELECT COUNT(usuario) AS 'count' FROM users WHERE usuario=? GROUP BY usuario");
+        statement.setString(1,username);
 
         ResultSet resultSet = statement.executeQuery();
         if(resultSet.first()) {
@@ -112,6 +160,74 @@ public class MLDao {
         resultSet.close();
         statement.close();
         return subscripcions;
+    }
+
+    public int getIdSubscripcion(int id) throws SQLException {
+        PreparedStatement stat = connection.prepareStatement(
+                "SELECT subscripcion FROM users WHERE id = ?"
+        );
+
+        stat.setInt(1,id);
+        ResultSet result = stat.executeQuery();
+        result.next();
+        int subscripcion = result.getInt("subscripcion");
+        result.close();
+        stat.close();
+        return subscripcion;
+
+    }
+
+    public int getSubscripcion(int id) throws SQLException {
+        PreparedStatement stat = connection.prepareStatement(
+                "SELECT subscripcion FROM users WHERE id = ?"
+        );
+
+        stat.setInt(1,id);
+
+        ResultSet result = stat.executeQuery();
+        result.next();
+        int subscripcion = result.getInt("subscripcion");
+        result.close();
+        stat.close();
+        return subscripcion;
+    }
+
+    public boolean subscribeNewUser(Usuario usuario, Subscripcion subscripcion) throws SQLException {
+        // Se modifica solo si no tiene la subscripcion ya y es el usuario
+        try {
+            // Prepare transaction
+            connection.setAutoCommit(false);
+
+            PreparedStatement stat = connection.prepareStatement(
+                    "SELECT id FROM users WHERE usuario = ?"
+            );
+            stat.setString(1,usuario.getCredentials().getNombreUsuario());
+            ResultSet resultSet = stat.executeQuery();
+            resultSet.next();
+            int id = resultSet.getInt("id");
+            resultSet.close();
+
+            PreparedStatement addStatement = connection.prepareStatement("INSERT INTO compras (fecha,producto,cliente) " +
+                    "VALUES (?,?,?)");
+            addStatement.setDate(1, new Date(new java.util.Date().getTime()),CALENDAR);
+            addStatement.setInt(2, subscripcion.getId());
+            addStatement.setInt(3, id);
+
+            int result = addStatement.executeUpdate();
+            addStatement.close();
+
+            if (result == 1) {
+                connection.commit();
+                return true;
+            } else
+                throw new SQLException("Unknown error when subscribing");
+
+        } catch (SQLException e) {
+            connection.rollback();
+            throw e;
+        } finally {
+            connection.setAutoCommit(true);
+        }
     }
 
     public boolean subscribeUser(Usuario usuario, Subscripcion subscripcion) throws SQLException {
@@ -254,6 +370,33 @@ public class MLDao {
         return list;
     }
 
+    public ArrayList<Compra> getCompras(int cliente) throws SQLException {
+        PreparedStatement stat = connection.prepareStatement(
+                "SELECT * FROM compras WHERE cliente = ?"
+        );
+        stat.setInt(1,cliente);
+
+        ResultSet result = stat.executeQuery();
+        ArrayList<Compra> compras = new ArrayList<>();
+        while(result.next()){
+            String nombreProducto;
+            int producto = result.getInt("producto");
+            if(producto==3){
+                nombreProducto = "Prime";
+            } else if(producto==2){
+                nombreProducto = "Pro";
+            } else{
+                nombreProducto = "Gratuito";
+            }
+            compras.add(new Compra(calendarFromSQLToDate(result.getDate("fecha")),nombreProducto,1));
+        }
+
+        result.close();
+        stat.close();
+        return compras;
+
+    }
+
     // Cambios a productos
     public void updateProducto(Subscripcion subscripcion) throws SQLException {
         if(subscripcion.getAccessLevel().getId() == AccessLevel.ADMIN_LEVEL)
@@ -363,4 +506,127 @@ public class MLDao {
         return new AccessLevel(resultSet.getInt("a.id"),resultSet.getBoolean("a.subirCodigo"),
                 resultSet.getBoolean("a.subirResultados"),resultSet.getBoolean("a.accesoResultados"));
     }
+
+    public void addProyecto(String nombre, int usuario) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement(
+                "INSERT INTO proyectos (nombre, usuario, codigo) VALUES (?,?,?)"
+        );
+
+        statement.setString(1, nombre);
+        statement.setInt(2,usuario);
+        statement.setString(3,"");
+
+        int result = statement.executeUpdate();
+        statement.close();
+        if(result==0)
+            throw new SQLException("No se ha podido insertar debido a un fallo inesperado");
+    }
+
+    public boolean updateCodigo(String nombre, String codigo) throws SQLException {
+        PreparedStatement stat = connection.prepareStatement(
+                "UPDATE proyectos SET codigo=? WHERE nombre=?");
+        stat.setString(1,codigo);
+        stat.setString(2,nombre);
+
+        int result = stat.executeUpdate();
+        stat.close();
+
+        if(result > 1)
+            throw new SQLException("Resultado inesperado: más de una coincidencia");
+        else
+            return result==1;
+    }
+
+    public String getCodigo(String nombre) throws SQLException {
+        PreparedStatement stat = connection.prepareStatement(
+                "SELECT codigo FROM proyectos WHERE nombre = ?"
+        );
+        stat.setString(1,nombre);
+
+        ResultSet result = stat.executeQuery();
+        result.next();
+        String codigo = result.getString("codigo");
+        result.close();
+        stat.close();
+        return codigo;
+    }
+
+    public ArrayList<Proyecto> getAllProyectos() throws SQLException {
+        PreparedStatement stat = connection.prepareStatement(
+                    "SELECT nombre,codigo FROM proyectos"
+        );
+
+        ResultSet result = stat.executeQuery();
+        ArrayList<Proyecto> proyectos = new ArrayList<>();
+
+        while(result.next()){
+            proyectos.add(new Proyecto(result.getString("nombre"), result.getString("codigo")));
+        }
+
+        return proyectos;
+
+    }
+
+    public ArrayList<Proyecto> getSomeProyectos(String filtro) throws SQLException {
+        PreparedStatement stat = connection.prepareStatement(
+                "SELECT nombre FROM proyectos WHERE nombre LIKE ?"
+        );
+
+        stat.setString(1,"%"+filtro+"%");
+
+        ResultSet result = stat.executeQuery();
+        ArrayList<Proyecto> proyectos = new ArrayList<>();
+
+        while(result.next()){
+            proyectos.add(new Proyecto(result.getString("nombre")));
+        }
+
+        return proyectos;
+    }
+
+    public int getUsuario(String nombre) throws SQLException {
+        PreparedStatement stat = connection.prepareStatement(
+                "SELECT usuario FROM proyectos WHERE nombre = ?"
+        );
+
+        stat.setString(1,nombre);
+        ResultSet result = stat.executeQuery();
+        result.next();
+
+        return result.getInt("usuario");
+    }
+
+    public ArrayList<Metodo> getAllMetodos(String proyecto) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement("SELECT * FROM metodos WHERE proyecto = ?");
+
+        statement.setString(1,proyecto);
+
+        ResultSet result = statement.executeQuery();
+        ArrayList<Metodo> metodos = new ArrayList<>();
+
+        while(result.next()){
+            metodos.add(new Metodo(result.getString("nombre"), result.getInt("eficacia"), result.getInt("tiempo")));
+        }
+        result.close();
+        statement.close();
+        return metodos;
+    }
+
+    public void addMetodo(Metodo metodo, String proyecto) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement(
+                "INSERT INTO metodos (nombre,eficacia,tiempo,proyecto) VALUES (?,?,?,?)");
+
+        statement.setString(1,metodo.getNombre());
+        statement.setInt(2,metodo.getEficacia());
+        statement.setInt(3,metodo.getTiempo());
+        statement.setString(4,proyecto);
+
+
+        int result = statement.executeUpdate();
+        statement.close();
+        if(result == 0)
+            throw new SQLException("No se ha podido insertar debido a un fallo inesperado");
+    }
+
+
 }

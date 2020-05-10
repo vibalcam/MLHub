@@ -1,5 +1,7 @@
 package dominio;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class Compra {
@@ -43,6 +45,11 @@ public class Compra {
 
     public Calendar getFecha() {
         return fecha;
+    }
+
+    public String getFechaString(){
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-dd-mm ");
+        return dateFormat.format(fecha.getTime());
     }
 
     public void setFecha(Calendar fecha) {
