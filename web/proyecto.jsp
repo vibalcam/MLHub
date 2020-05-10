@@ -20,50 +20,6 @@
 
 <body>
 <div class="wrapper">
-    <!-- Sidebar  -->
-    <nav id="sidebar" class="bg-dark text-white">
-        <div class="sidebar-header">
-            <h3>Admin Portal</h3>
-            <strong>MLH<i class="fas fa-users-cog"></i></strong>
-        </div>
-
-        <ul class="list-unstyled components">
-            <li>
-                <a href="#estadisticas" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                    <i class="fas fa-calculator"></i>
-                    Estadísticas
-                </a>
-                <ul class="collapse list-unstyled sidebar-sections" id="estadisticas">
-                    <li>
-                        <a href="#estadisticaProductos">Productos</a>
-                    </li>
-                    <li>
-                        <a href="#estadisticaFechas">Fechas</a>
-                    </li>
-                </ul>
-            </li>
-            <li>
-                <a href="#catalogo" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                    <i class="fas fa-copy"></i>
-                    Catálogo
-                </a>
-                <ul class="collapse list-unstyled sidebar-sections" id="catalogo">
-                    <li>
-                        <a href="#catalogoDisponibles">Disponibles</a>
-                    </li>
-                    <li>
-                        <a href="#catalogoOfertas">Ofertas</a>
-                    </li>
-                </ul>
-            </li>
-        </ul>
-
-        <ul id="shortcuts" class="list-unstyled">
-            <li>
-                <a href="#" class="quick-links bg-secondary text-white">Vuelta al inicio</a>
-            </li>
-        </ul>
-    </nav>
 
     <!-- Navigation  -->
     <div id="content">

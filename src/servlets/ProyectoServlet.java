@@ -58,7 +58,7 @@ public class ProyectoServlet extends HttpServlet {
             }
 
             if((codigo != null) && (proyecto2 != null)){
-                dao.updateCodigo(proyecto, codigo);
+                dao.updateCodigo(proyecto, codigo.replaceAll("\n", "&n"));
             }
 
             if(dao.getUsuario(proyecto) == ((Usuario) request.getSession().getAttribute("userLogged")).getId()){
@@ -71,7 +71,7 @@ public class ProyectoServlet extends HttpServlet {
 
             request.setAttribute("metodos", dao.getAllMetodos(proyecto));
             request.setAttribute("nombreProyecto", proyecto);
-            request.setAttribute("codigo",dao.getCodigo(proyecto));
+            request.setAttribute("codigo",dao.getCodigo(proyecto).replaceAll("&n","\n"));
             request.setAttribute("level", dao.getSubscripcion(id));
             request.getRequestDispatcher("/inicio/proyecto/view").forward(request,response);
 
