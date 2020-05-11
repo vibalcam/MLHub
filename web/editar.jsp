@@ -65,6 +65,7 @@
             <button class="btn btn-success" type="submit" name="peticion" value="save" onclick="return registrar();">Guardar Cambios</button>
             <button class="btn btn-warning" onclick="return borrar();">Borrar</button>
             <button class="btn btn-danger" type="submit" name="peticion" value="delete" onclick="return cancelar();">Eliminar Perfil</button>
+            <a href="${pageContext.request.contextPath}/inicio" class="btn btn-info" role="button">Volver al inicio</a>
         </div>
 
         <c:choose>
@@ -81,7 +82,7 @@
 </div>
 
 <!-- JQuery -->
-<script src="scripts/jquery-3.3.1.js"></script>
+<script src="${pageContext.request.contextPath}/scripts/jquery-3.3.1.js"></script>
 <!-- Bootstrap js -->
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
